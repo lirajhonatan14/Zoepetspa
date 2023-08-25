@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Relatorio de Caixa</title>
+</head>
+<body>
+    <h1>Relatório de Caixa</h1>
+    <form method="post" action="">
+        {% csrf_token %}
+        <label for="mes">Mês:</label>
+        <select id="mes" name="mes">
+                <option value="01">Janeiro</option>
+                <option value="02">Fevereiro</option>
+                <option value="03">Março</option>
+                <option value="04">Abril</option>
+                <option value="05">Maio</option>
+                <option value="06">Junho</option>
+                <option value="07">Julho</option>
+                <option value="08">Agosto</option>
+                <option value="09">Setembro</option>
+                <option value="10">Outubro</option>
+                <option value="11">Novembro</option>
+                <option value="12">Dezembro</option>
+        </select>
+        <label for="ano">Ano:</label>
+        <input type="number" name="ano"  max="9999">
+        <input type="submit" value="Gerar Relatório">
+    </form>
+</body>
+</html>

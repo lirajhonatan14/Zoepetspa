@@ -6,8 +6,10 @@ from django.contrib.auth import login as login_django
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import login_required, user_passes_test
 
-@login_required
-@user_passes_test(lambda u: u.is_superuser)
+def acesso_negado(request):
+    return render(request, 'acesso_negado.html')
+
+@login_required(login_url="/auth/acesso_negado/")
 def cadastro(request):
     if request.method == "GET":   
         return render(request,'cadastro.html')

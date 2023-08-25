@@ -1,13 +1,13 @@
 from django.contrib.auth import logout
 from django.shortcuts import redirect, render
 from ficha.models import FichaDog, VacinaAnimal
-from datetime import datetime, timedelta
-
+from datetime import datetime, timedelta, date
+from django.contrib.auth.decorators import login_required
 def logout_view(request):
     logout(request)
     return redirect('home')
 
-from datetime import date
+
 def verificar_vacina():
     vacinas_vencidas = []
     validade = []
@@ -24,7 +24,7 @@ def verificar_vacina():
    
     return vacinas_vencidas, validade
 
-
+@login_required(login_url="/auth/login/")
 def lembrardatanasc(mes):
      # Obtenha o número do mês atual
     mes_atual = datetime.now().month
@@ -57,7 +57,7 @@ def home(request, mes=None):
             'animal_nome': vacina_animal.pet.nome,
             'animal_raca': vacina_animal.pet.raca,
             'vacina_nome': vacina_animal.vacina.nome,
-            'data_validade': vacina_animal.vacina.validade,
+            
             
         }
         vacinas_vencidas_info.append(vacina_info)

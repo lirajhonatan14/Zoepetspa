@@ -18,6 +18,50 @@ from django.db.models import Sum
 from datetime import date
 from decimal import Decimal
 
+def relatorio_caixa(request):
+    if request.method == 'POST':
+        mes = request.POST.get('mes')
+        ano = request.POST.get('ano')
+        
+        # Fazendo a consulta para filtrar os itens da tabela Caixa
+        caixas_filtrados = Caixa.objects.filter(data__month=mes, data__year=ano)
+        
+        context = {
+            'caixas_filtrados': caixas_filtrados,
+        }
+        return render(request, 'relatorio_vendas.html', context)
+    
+    return render(request, 'relatorios.html')
+
+def relatorios(request):
+    if request.method == 'POST':
+        mes = request.POST.get('mes')
+        ano = request.POST.get('ano')
+        
+        # Fazendo a consulta para filtrar os itens da tabela Caixa
+        caixas_filtrados = Caixa.objects.filter(data__month=mes, data__year=ano)
+        
+        context = {
+            'caixas_filtrados': caixas_filtrados,
+        }
+        
+        template_path = 'relatorio_vendas.html'
+        template = get_template(template_path)
+        html = template.render(context)
+
+        # Create a BytesIO buffer to receive the PDF output
+        buffer = io.BytesIO()
+
+        # Generate the PDF output using the BytesIO buffer
+        pdf = pisa.pisaDocument(io.BytesIO(html.encode("UTF-8")), buffer)
+
+        # Return the PDF as an HTTP response
+        response = HttpResponse(buffer.getvalue(), content_type='application/pdf')
+        response['Content-Disposition'] = 'filename="relatorio_caixa.pdf"'
+        return response
+    
+    return render(request, 'relatorios.html')
+
 def total(reserva, num_reserva):
     caixa = Caixa.objects.filter(num_reserva=num_reserva)
     caixas = CaixaDay.objects.filter(num_reserva=num_reserva)
@@ -462,7 +506,7 @@ def exibir_reserva(request, num_reserva):
     reserva = get_object_or_404(Reserva, num_reserva=num_reserva)
     return render(request, 'ficha_reserva.html', {'pet': reserva})
 @login_required(login_url="/auth/login/")
-def relatorio_caixa(request):
+def relatorio_caixasssss(request):
     data_atual = datetime.now().date()
     data_inicio = data_atual - timedelta(days=30)
     hora = timezone.now().time()

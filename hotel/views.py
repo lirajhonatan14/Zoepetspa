@@ -105,19 +105,34 @@ def reservabanho_list(request):
         
     }
     return render(request, 'lista_reservabanho.html', context)
+from django.db.models import F
+@login_required(login_url="/auth/login/")
+def atualizar_total_reservas_banho():
+    reservas_banho = ReservaBanho.objects.all()
+    
+    for reserva in reservas_banho:
+        total = reserva.valor_servico
+        # Qualquer outra lógica para calcular o total pode ser adicionada aqui
+        reserva.total = total
+        reserva.save()
+
+# Chamando a função para atualizar os totais das reservas de banho
 
 @login_required(login_url="/auth/login/")
 def proc_reserva(request):
     hoje = date.today()  # obtém a data atual
-    reservas = Reserva.objects.all()
-    reservasday = ReservaDay.objects.all()
-    reservasbanho = ReservaBanho.objects.all()
-    
+    reservas = Reserva.objects.all().order_by('data_entrada')
+    reservasday = ReservaDay.objects.all().exclude(pacote__nome="Meia Diária/ Avaliação").order_by('data')
+    reservasdayav = ReservaDay.objects.filter(pacote__nome='Meia Diária/ Avaliação').order_by('data')
+    reservasbanho = ReservaBanho.objects.all().order_by('data_reserva')
+    #atualizar_total_reservas_banho() precisa tirar de comentario essa linha depois
     search = request.GET.get('search')
     if search:
-        reservas = reservas.filter(pet__nome__icontains=search)
-        reservasday = reservasday.filter(pet__nome__icontains=search)
-        reservasbanho = reservasbanho.filter(cachorro__nome__icontains=search)
+        reservas = reservas.filter(pet__nome__icontains=search).order_by('data_entrada')
+        reservasday = reservasday.filter(pet__nome__icontains=search).order_by('data')
+        reservasdayav = reservasdayav.filter(pet__nome__icontains=search).order_by('data')
+
+        reservasbanho = reservasbanho.filter(cachorro__icontains=search).order_by('data_reserva')
         
         
         
@@ -125,6 +140,8 @@ def proc_reserva(request):
     context = {
         'reservas': reservas,
         'reservasday':reservasday,
+        'reservasdayav':reservasdayav,
+
         'reservasbanho':reservasbanho,
         
     }
@@ -256,16 +273,23 @@ def pacotes(request):
     else:
         form_reserva = ReservaDayForm()
     return render(request, 'pacote.html', {'form_reserva': form_reserva})
-
+@login_required(login_url="/auth/login/")
 def reservar_banho(request):
     if request.method == 'POST':
         form = ReservaBanhoForm(request.POST)
         if form.is_valid():
             reserva = form.save(commit=False)
+            
+            # Obtenha o valor do serviço escolhido
+            tipo_banho = form.cleaned_data['tipo_banho']
+            valor_servico = tipo_banho.valor_servico
+            
+            # Calcula o total usando o valor do serviço
+            reserva.total = valor_servico
+            
             form.save_m2m()
             reserva.save()
             return HttpResponse("Reserva feita com sucesso!")
-        
     else:
         form = ReservaBanhoForm()
     

@@ -57,9 +57,6 @@ class ReservaBanhoForm(forms.ModelForm):
             reserva.save()
         self.save_m2m()
         return reserva
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['cachorro'].queryset = self.fields['cachorro'].queryset.order_by('nome')
     
     
 

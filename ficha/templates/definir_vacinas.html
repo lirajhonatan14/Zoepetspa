@@ -3,6 +3,22 @@
   <head>
     <meta charset="utf-8">
     {% load static %}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+      $(document).ready(function() {
+        $('#id_data_administracao').on('input', function() {
+          var input = $(this);
+          var value = input.val();
+          var newValue = formatDate(value);
+          input.val(newValue);
+        });
+      });
+        function formatDate(value) {
+          var cleanedValue = value.replace(/[^\d]/g, '');
+          var formattedValue = cleanedValue.replace(/(\d{2})(\d{2})(\d{4})/, '$1/$2/$3');
+          return formattedValue;
+        }
+    </script>
     <link rel="stylesheet" type="text/css" href="{% static 'css/style_ficha2.css' %}">
     <title>Formulário para Cadastro de Vacinas</title>
   </head>

@@ -3,43 +3,83 @@
 <html>
   <head>
     <meta charset="utf-8">
-  
+    <link rel="apple-touch-icon" sizes="57x57" href="{% static 'img/apple-icon-57x57.png' %}">
+    <link rel="apple-touch-icon" sizes="60x60" href="{% static 'img/apple-icon-60x60.png' %}">
+    <link rel="apple-touch-icon" sizes="72x72" href="{% static 'img/apple-icon-72x72.png' %}">
+    <link rel="apple-touch-icon" sizes="76x76" href="{% static 'img/apple-icon-76x76.png' %}">
+    <link rel="apple-touch-icon" sizes="114x114" href="{% static 'img/apple-icon-114x114.png' %}">
+    <link rel="apple-touch-icon" sizes="120x120" href="{% static 'img/apple-icon-120x120.png' %}">
+    <link rel="apple-touch-icon" sizes="144x144" href="{% static 'img/apple-icon-144x144.png' %}">
+    <link rel="apple-touch-icon" sizes="152x152" href="{% static 'img/apple-icon-152x152.png' %}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'img/apple-icon-180x180.png' %}">
+    <link rel="icon" type="image/png" sizes="192x192"  href="{% static 'img/android-icon-192x192.png' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'img/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="96x96" href="{% static 'img/favicon-96x96.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'img/favicon-16x16.png' %}">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+    <script>
+      function toggleForm() {
+          const formSection = document.getElementById("retractableForm");
+          formSection.classList.toggle("slide-out");
+          const toggleButton = document.getElementById("toggleButton");
+          toggleButton.classList.toggle("rotate");
+          const nascimentoDiv = document.querySelector(".nascimento");
+          if (formSection.classList.contains("slide-out")) {
+            nascimentoDiv.style.width = "calc(100%)"; // Ajuste a largura conforme necessário
+        } else {
+            nascimentoDiv.style.width = "70%";
+        }
+      }
+     
+        
+        
+
+    </script>
     <title>Página Inicial</title>
   </head>
   <body>
-    
-   <div class='corpo'>
-    <div class="form">
-      {% if usuario.is_authenticated %}
-        <h3>Usuário: {{usuario.username}}<h3>
-      {% endif %}
-      <img id="logo" src="{% static 'img/logo2.jpg' %}">
 
-      <h1>ZoePetSpa</h1>
-      <div class="ul">
-        <a href="{% url 'login' %}">Login</a>
-        <a href="{% url 'cadastro' %}">Novo Usuário</a>
-        <a href="{% url 'ficha:ficha' %}">Cadastrar Pet</a>
-        <a href="{% url 'ficha:lista' %}">Cães cadastrados</a>
-        <a href="{% url 'reserva' %}">Nova Reserva Hotel</a>
-        <a href="{% url 'reservaday' %}">Nova Reserva Day Care</a>
-        <a href="{% url 'reservar_banho' %}">Nova Reserva Banho</a>
-        <a href="{% url 'lista_reserva' %}">Reservas do Hotel em Andamento</a>
-        <a href="{% url 'lista_reservaday' %}">Reservas Day Care em Andamento</a>
-        <a href="{% url 'lista_reservabanho' %}">Reservas do Banho</a>
-        <a href="{% url 'historico_reserva' %}">Historico de Reservas</a>
-        <a href="{% url 'caixa:relatoriocaixa' %}">Gerar Relatório de Caixa</a>
-        <a href="{% url 'ficha:definir_vacina' %}">Definir Vacina</a>
-        <a href="{% url 'ficha:cadastrar_vacina' %}">Nova Vacina</a>
-        <a href="{% url 'pacote' %}">Pacotes</a>
-
-        <a href="{% url 'logout' %}">Sair</a><br><br>
+    <div class='corpo'>
+      <img id="toggleButton" onclick="toggleForm()" src="{% static 'img/logo2.jpg' %}">
+      
+      <div class="form slide-out" id="retractableForm">
+        {% if usuario.is_authenticated %}
+        <div class="usuario">
+          <img id="user" src="{% static 'img/user.jpg' %}">
+          <h3>{{usuario.username}}<h3>
+        {% endif %}
       </div>
-      {% load humanize %}
+        <h1>ZoePetSpa</h1>
+        <div class="ul">
+          <a href="{% url 'login' %}">Login</a>
+          <a href="{% url 'cadastro' %}">Novo Usuário</a>
+          <a href="{% url 'ficha:ficha' %}">Cadastrar Pet</a>
+          <a href="{% url 'ficha:lista' %}">Cães cadastrados</a>
+          <a href="{% url 'reserva' %}">Nova Reserva Hotel</a>
+          <a href="{% url 'reservaday' %}">Nova Reserva Day Care</a>
+          <a href="{% url 'reservar_banho' %}">Nova Reserva Banho</a>
+          <a href="{% url 'lista_reserva' %}">Reservas do Hotel em Andamento</a>
+          <a href="{% url 'lista_reservaday' %}">Reservas Day Care em Andamento</a>
+          <a href="{% url 'lista_reservabanho' %}">Reservas do Banho</a>
+          <a href="{% url 'historico_reserva' %}">Historico de Reservas</a>
+          <a href="{% url 'caixa:relatoriocaixa' %}">Gerar Relatório de Caixa</a>
+          <a href="{% url 'ficha:definir_vacina' %}">Definir Vacina</a>
+          <a href="{% url 'ficha:cadastrar_vacina' %}">Nova Vacina</a>
+          <a href="{% url 'pacote' %}">Pacotes</a>
+
+          <a href="{% url 'logout' %}">Sair</a><br><br>
+        </div>
+        {% load humanize %}
+        
+      </div>
     </div>
     <div class='nascimento'>
+      <iframe class="calendario" src="pagina.html" width="90%" height="800px"></iframe>
       <h2>Cachorros com Aniversário no Mês de {{mes}}</h2>
-      
+
       {% if cachorros_aniversario %}
       {% for cachorro in cachorros_aniversario %}
         <p>Dog: {{ cachorro.nome }} - {{ cachorro.raca }} - {{ cachorro.data_de_nascimento|date:"d" }} de {{ cachorro.data_de_nascimento|date:"F" }}</p>
@@ -61,31 +101,20 @@
       <h2>Cachorros com vacinas vencidas:</h2>
       {% if vacinas_vencidas %}
         {% for vacina in vacinas_vencidas %}
-      
+
           <p>Animal: {{ vacina.animal_nome }} - {{ vacina.animal_raca }}</p>
-          <p>Vacina: {{ vacina.vacina_nome }}</p> 
+          <p>Vacina: {{ vacina.vacina_nome }}</p>
           <p>Data de Validade: {{ vacina.data_validade }}</p>
           <p>--------------------------------------------</p>
         {% endfor %}
-      
+
       {% else %}
         <p>Todos os animais estão com suas vacinas em dias.</p>
       {% endif %}
-      <h2>Cachorros com vacinas de reforço atrasadas:</h2>
-      {% if vacinas_reforco %}
-        {% for vacina in vacinas_reforco %}
       
-          <p>Animal: {{ vacina.animal_nome }} - {{ vacina.animal_raca }}</p>
-          <p>Vacina: {{ vacina.vacina_nome }}</p> 
-          <p>Data de Reforço: {{ vacina.data_reforco }}</p>
-          <p>--------------------------------------------</p>
-        {% endfor %}
-      
-      {% else %}
-        <p>Todos os animais estão com suas vacinas em dias.</p>
-      {% endif %}
-      </div>   
-        
+      <footer>
+        <p>CopyRight &copy; 2023 ZoePetSpa. Todos os direitos reservados.</p>
+    </footer>
     </div>
     <style>
     body{
@@ -93,73 +122,112 @@
       background-size: contain;
   }
   .form{
-      height: auto;
+      height: 90%;
       border: 4px solid black;
-      width: auto;
-      display: flex;
-      align-items: center;
+      width: 20%;
       margin-left: 1%;
       margin-bottom: 1%;
       background-color: rgb(231, 141, 130);
       border-radius: 5%;
       flex-direction: column;
-      font-size: x-large;
+      font-size: large;
       display: inline-block;
       padding-right:3%;
+      transform-origin: left;
+      transition: transform 0.3s ease;
+      transform-origin: left;
+      position: fixed;
   }
+  .hidden {
 
-  #logo{
-      margin-top: 10%;
-      width: 30%;
-      margin-left: 40%;
+    transform: translateX(-100%);
+    opacity: 0;
+} 
+.slide-out {
+    transform: translateX(-100%);
+    opacity: 0;
+    transition: transform 0.3s ease, opacity 0.3s ease; /* Adicione a transição para opacity */
+}
+/* Seus estilos atuais... */
+.calendario{
+    margin-top: 3%;
+}
+#toggleButton {
+    background-color: rgb(231, 141, 130);
+    border: none;
+    color: white;
+    padding: 10px;
+    border-radius: 50%;
+    position: absolute;
+    top: 10%;
+    width: 5%;
+    transform: rotate(0deg);
+    transition: transform 0.3s ease;
+    cursor: pointer; /* Adicionado para indicar que é clicável */
+    z-index: 1; /* Colocado acima do conteúdo */
+    z-index: 1;
+    position: fixed;
+    left: 2%;
+}
+
+/* Mais estilos... */
+
+#toggleButton.rotate {
+    transform: rotate(360deg);
+}
+  #user{
+
+      width: 10%;
       border-radius:20%;
+  }
+  .usuario{
+    display: flex;
+    align-items: center;
+    gap: 3%;
+    font-size: large;
+    justify-content: end;
   }
   .tabela{
       height: 700px;
       width: 600px;
-      display: flex;
-      
+
   }
   .ul{
-
+      margin-left: 10%;
       display:flex;
       flex-direction: column;
+      position: absolute;
   }
   a{
       text-decoration:none;
       color: black;
       padding: 1%;
-      text-align: left;
-      margin-left:15%;
-
+      
   }
- 
+
   h1{
       text-align: center;
+      margin-left: 16%;
   }
   .nascimento{
     height: auto;
     border: 4px solid black;
-    width: auto;
+    width: 99%;
     display: flex;
     align-items: center;
     margin-left: 1%;
+
     margin-bottom: 1%;
     background-color: rgb(231, 141, 130);
     border-radius: 5%;
     font-size: x-large;
     flex-direction: column;
     text-decoration: none;
-    display: flex;
-    padding:1%;
+    float: right;
   }
-  .corpo{
-    display: flex;
-    gap: 10%;
-    
-  }
+ 
 
-  </style>  
-  
+  </style>
+
   </body>
 </html>

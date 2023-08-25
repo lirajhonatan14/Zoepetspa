@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Relatório de Reservas</title>
+</head>
+<body>
+    {% if context_list %}
+    <h1>Recibo Banho</h1>
+    {% for context in context_list %}
+        <p>Número da Reserva: {{ context.num_reserva }}</p>
+        <p>Nome do Animal: {{ context.nome_pet }}</p>
+        <p>Nome do Tutor: {{ context.nome_tutor }}</p>
+        <p>CPF do Tutor: {{ context.cpf_tutor }}</p>
+        <p>Data da Reserva: {{ context.data }}</p>
+        <p>Hora da Reserva: {{ context.hora }}</p>
+        <p>Banhista: {{ context.usuario }}</p>
+        {%  if context.servicos %}
+            <p>Serviços Adicionais: {{context.servicos.nome_servico}} - R$ {{context.servicos.valor_servico}}</p>
+        {% endif %}
+        <p>Desconto: {{ context.desconto }}%</p>
+        <p>Método de Pagamento: {{ context.metodo }}</p>
+        <p>Total: R${{ context.total }}</p>
+        <p>Relatorio dao Banho: <br>{{ context.relatorio }}</p>
+        <hr>
+    {% endfor %}
+{% else %}
+    <p>Não há dados disponíveis.</p>
+{% endif %}
+</body>
+<style>
+    * {
+        font-size: 12pt;
+    }
+</style>
+</html>

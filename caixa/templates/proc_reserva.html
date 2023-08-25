@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pesquisar Reserva</title>
+</head>
+<body>
+    <h1>Pesquisar Reserva</h1>
+    <form method="post" action="{% url 'caixa:ficha_reserva' %}">
+        {% csrf_token %}
+        <label for="pet">Nome do Pet:</label>
+        <select id="pet" name="pet">
+            <option value="">Selecione um Pet</option>
+            {% for reserva in reservas %}
+                <option value="{{ reserva.nome }}">{{ reserva.nome }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Pesquisar</button>
+    </form>
+</body>
+</html>

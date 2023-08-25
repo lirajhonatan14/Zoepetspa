@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.novareserva2.css' %}">
+    <title>Reserva Banho</title>
+  </head>
+  <body>
+    <div class="form">
+        {% block content %}
+          <h1>Nova Reserva de Banho</h1>
+          <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <br>
+            <div class='home'>
+              <input class="butao" type="submit" value="Salvar">
+              <a href="{% url 'home' %}">Home</a>
+
+            </div>
+          </form>
+        {% endblock %}
+
+      
+    </div>
+    <style>
+      .home {
+        gap: 10%;
+      }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+    $(document).ready(function() {
+      $('#id_data_reserva').on('input', function() {
+        var input = $(this);
+        var value = input.val();
+        var newValue = formatDate(value);
+        input.val(newValue);
+      });
+
+      $('#id_hora_reserva').on('input', function() {
+        var input = $(this);
+        var value = input.val();
+        var newValue = formatTime(value);
+        input.val(newValue);
+      });
+    });
+
+    function formatDate(value) {
+      var cleanedValue = value.replace(/[^\d]/g, '');
+      var formattedValue = cleanedValue.replace(/(\d{2})(\d{2})(\d{4})/, '$1/$2/$3');
+      return formattedValue;
+    }
+
+    function formatTime(value) {
+      var cleanedValue = value.replace(/[^\d]/g, '');
+      var formattedValue = cleanedValue.replace(/(\d{2})(\d{2})/, '$1:$2');
+      return formattedValue;
+    }
+    </script>
+  </body>
+</html>

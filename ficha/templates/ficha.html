@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style_ficha2.css' %}">
+    <title>Formulário para registro de cães</title>
+  </head>
+  <body>
+    <div class="form">
+    <h1>Formulário para registro de cães</h1>
+      <form action='{% url "ficha:ficha" %}' method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div class='home'>
+          <input class ="butao" type="submit" value="Salvar">
+          <a href="{% url 'home' %}">Home</a>
+        </div>
+      </form>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+    $(document).ready(function() {
+      $('#id_data_de_nascimento').on('input', function() {
+        var input = $(this);
+        var value = input.val();
+        var newValue = formatDate(value);
+        input.val(newValue);
+      });
+  
+      $('#id_contato_tutor').on('input', function() {
+        var input = $(this);
+        var value = input.val();
+        var newValue = formatPhone(value);
+        input.val(newValue);
+      });
+    
+      $('#id_cpf_tutor').on('input', function() {
+        var input = $(this);
+        var value = input.val();
+        var newValue = formatCPF(value);
+        input.val(newValue);
+      });
+      });
+
+    function formatDate(value) {
+      var cleanedValue = value.replace(/[^\d]/g, '');
+      var formattedValue = cleanedValue.replace(/(\d{2})(\d{2})(\d{4})/, '$1/$2/$3');
+      return formattedValue;
+    }
+
+    function formatPhone(value) {
+      var cleanedValue = value.replace(/[^\d]/g, '');
+      var formattedValue = cleanedValue.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+      return formattedValue;
+    }
+    
+    function formatCPF(value) {
+      var cleanedValue = value.replace(/[^\d]/g, '');
+      var formattedValue = cleanedValue.replace(/(\d{3})(\d{3})(\d{3})(\d{0,2})/, function(match, p1, p2, p3, p4) {
+        var cpf = p1 + '.' + p2 + '.' + p3;
+        if (p4) {
+          cpf += '-' + p4;
+        }
+        return cpf;
+      });
+      return formattedValue;
+    }
+    </script>
+  </body>
+</html>

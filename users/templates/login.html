@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style_login2.css' %}">
+    <title>Login</title>
+  </head>
+  <body>
+    <div class="form">
+        <h1>Login</h1>
+        <form action="{% url 'login' %}" method="post">{% csrf_token %}
+        <label for="username">Nome:</label>
+        <input class = 'caixa' type="text" placeholder="username" name="username">
+        <br>
+        <br>
+        <label for="senha">Senha:</label>
+        <input class = 'caixa' type="password" placeholder="password" name="senha">
+        <br>
+        <br>
+        <input class="butao" type="submit" value="Login">
+        <a style='font-size:20px  ' href="{% url 'home' %}">Home</a>
+
+
+        </form>
+    </div>
+  </body>
+</html>

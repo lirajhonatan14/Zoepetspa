@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  {% load static %}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/style_proc1.css' %}">
+    <title>Usar pacote</title>
+</head>
+<body>
+    <h1>Usar pacote</h1>
+    <form class='form' method="POST" action="{% url 'pacote_reservado' %}">
+        {% csrf_token %}
+        <label for="pacotes">Selecione o pacote que desejar usar:</label>
+        <select name="dog_id" id="animal">
+            {% for animal in pacotes %}
+              <option value="{{ animal.Dog.nome }}">{{ animal.Dog }} - {{ animal.pacote }}</option>
+            {% endfor %}
+        </select>
+        <label>Data: <input name="data" class="data" type="date"></label>
+
+        <label>Hora de Entrada: <input name="hora_entrada" class="hora_entrada" type="time"></label>
+        <br>
+        <button type="submit">Renovar Pacote</button>
+        <a href="{% url 'home' %}">Home</a>
+    </form>
+</body>
+</html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  {% load static %}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/style_proc1.css' %}">
+    <title>Pesquisar Reserva Hotel</title>
+</head>
+<body>
+    <h1>Pesquisar Reserva Hotel</h1>
+    <form class='form' method="POST" action="{% url 'mostrar_reserva' %}">
+        {% csrf_token %}
+        <label for="animal">Selecione o nome do animal:</label>
+        <select name="nome_id" id="animal">
+            {% for animal in animais %}
+              <option value="{{ animal.num_reserva }}">{{ animal.pet.nome }} - {{ animal.pet.raca }}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <button type="submit">Puxar Reserva</button>
+        <a href="{% url 'home' %}">Home</a>
+    </form>
+</body>
+</html>

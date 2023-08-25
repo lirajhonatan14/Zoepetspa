@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style_proc.css' %}">
+    <title>Reserva Hotel</title>
+</head>
+<body>
+    <a class="home" href="{% url 'home' %}">Home</a>
+    
+    <div class='form'>
+        <h1>Número da Reserva: {{animal.num_reserva}}</h1>
+        <p><strong>Nome do Animal:</strong> {{ animal.pet.nome }}</p>
+        <p><strong>Número da Reserva:</strong> {{ animal.num_reserva }}</p>
+        <p><strong>Data de Entrada:</strong> {{ animal.data_entrada }}</p>
+        <p><strong>Data de Saída:</strong> {{ animal.data_saida }}</p>
+        <p><strong>Hora de Entrada:</strong> {{ animal.hora_entrada }}</p>
+        <p><strong>Usuário:</strong> {{ animal.usuario }}</p>
+        <p><strong>Horário da Alimentação:</strong> {{ animal.horario_alimentacao}}</p>
+        {%if animal.horario_personalizado%}
+            <p><strong>Horário Personalizado:</strong> {{ animal.horario_personalizado }}</p>
+        {%endif%}
+        <p><strong>Instruções de Medicamentos:</strong> {{ animal.instrucoes_medicamentos }}</p>
+        <p><strong>Autorização para Cuidados Medicos:</strong> {{ animal.autorizacao_para_cuidados_medicos }}</p>
+        {%if animal.servicos_adicionais%}
+            <p><strong>Serviços Adicionais:</strong> {{ animal.servicos_adicionais }}</p>
+        {%endif%}
+        {%if animal.pago == True%}
+            <p><strong>Pago:</strong> Sim</p>
+        {% else %}
+            <p><strong>Pago:</strong> Não</p>
+        {%endif%}
+        <p><strong>Total:</strong> R$ {{ caixa.total }}</p>
+    
+    
+        <!-- Adicione outras informações que desejar mostrar -->
+    </div>
+</body>
+<style>
+    body{
+        background-image: url('/static/img/fundo.jpeg');
+      }
+      .form{
+        height: auto;
+        border: 4px solid black;
+        width: 40%;
+        margin-left: 5%;
+        background-color: rgb(231, 141, 130);
+        font-size: x-large;
+    } 
+    p{
+        margin-left: 5%;
+    }
+    .home{
+        font-size: 20px;
+        text-decoration: none;
+        color: black;
+        border: 2px solid  black;
+        background-color: rgb(231, 141, 130);
+        text-align: center;
+      }
+      h1{
+        margin-left: 5%;
+      }
+</style>
+</html>

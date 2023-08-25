@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <!DOCTYPE html>
+
+    <title>Relatório de Caixa</title>
+</head>
+<body>
+    <h1 class='re'>Relatório de Caixa</h1>
+    <h1>Relatório de Caixa Hotel</h1>
+    {% for context in context_list %}
+        <table class='hotel'>
+            
+            <tbody>
+                <h3>Pagamentos no Cartão de Debito</h3>
+
+                {% for valor_total in context.debito %}
+                    <p>Numero da Reserva: {{valor_total.num_reserva}} - Nome do Animal: {{valor_total.num_reserva.pet.nome}}, {{valor_total.num_reserva.pet.raca}} Data: {{valor_total.data|date:"d/m/Y"}} - Valor da Reserva: R$ {{ valor_total.total }}</p>
+                
+                {% endfor %}
+                {% if context.total_debito%}
+                    <p>Total das Reservas Hotel no Debito: R$ {{context.total_debito}}</p>
+                {% endif %}
+            </tbody>
+            <tbody>
+                <h3>Pagamentos no Cartão de Crédito</h3>
+
+                {% for valor_total in context.credito %}
+                    <p>Numero da Reserva: {{valor_total.num_reserva}} - Nome do Animal: {{valor_total.num_reserva.pet.nome}}, {{valor_total.num_reserva.pet.raca}} Data: {{valor_total.data|date:"d/m/Y"}} - Valor da Reserva: R$ {{ valor_total.total }}</p>
+                {% endfor %}
+                {% if context.total_credito%}
+                    <p>Total das Reservas Hotel no Crédito: R$ {{context.total_credito}}</p>
+                {% endif %}
+            </tbody>
+            <tbody>
+                <h3>Pagamentos no Dinheiro</h3>
+
+                {% for valor_total in context.dinheiro %}
+                            <p>Numero da Reserva: {{valor_total.num_reserva}} - Nome do Animal: {{valor_total.num_reserva.pet.nome}}, {{valor_total.num_reserva.pet.raca}} Data: {{valor_total.data|date:"d/m/Y"}} - Valor da Reserva: R$ {{ valor_total.total }}</p>
+                
+                {% endfor %}
+                {% if context.total_dinheiro%}
+                    <p>Total das Reservas Hotel no Dinheiro: R$ {{context.total_dinheiro}}</p>
+                {% endif %}
+            </tbody>
+            <tbody>
+                <h3>Pagamentos no Pix</h3>
+
+                {% for valor_total in context.pix %}
+                            <p>Numero da Reserva: {{valor_total.num_reserva}} - Nome do Animal: {{valor_total.num_reserva.pet.nome}}, {{valor_total.num_reserva.pet.raca}} Data: {{valor_total.data|date:"d/m/Y"}} - Valor da Reserva: R$ {{ valor_total.total }}</p>
+                
+                {% endfor %}
+                {% if context.total_pix%}
+                    <p>Total das Reservas Hotel no Pix: R$ {{context.total_pix}}</p>
+                {% endif %}
+            </tbody>
+            <p> Total Reservas Hotel: R$ {{context.total}}</p>
+        </table>
+    {% endfor %}
+    <p>______________________________________________________________________________________   </p>
+
+    <h1>Relatório de Caixa Day Care</h1>
+    {% for context in context_list %}
+        <table class='daycare'>
+            <tbody>
+                <h3>Pagamentos no Cartão de Debito</h3>
+
+                {% for valor_total in context.debito_day %}
+                            <p>Numero da Reserva: {{valor_total.num_reserva}} - Nome do Animal: {{valor_total.num_reserva.pet.nome}}, {{valor_total.num_reserva.pet.raca}} -     Data: {{valor_total.data|date:"d/m/Y"}} - Valor da Reserva: R$ {{ valor_total.total }}</p>
+                {% endfor %}
+                {% if context.total_debitoday %}
+                    <p>Total das Reservas Day Care no Debito: R$ {{context.total_debitoday}}</p>
+                {% endif %}
+            </tbody>    
+            <tbody>
+                <h3>Pagamentos no Cartão de Crédito</h3>
+
+                {% for valor_total in context.credito_day %}
+                            <p>Numero da Reserva: {{valor_total.num_reserva}} - Nome do Animal: {{valor_total.num_reserva.pet.nome}}, {{valor_total.num_reserva.pet.raca}} Data: {{valor_total.data|date:"d/m/Y"}} - Valor da Reserva: R$ {{ valor_total.total }}</p>
+                {% endfor %}
+                {% if context.total_creditoday %}
+                    <p>Total das Reservas Day Care no Crédito: R$ {{context.total_creditoday}}</p>
+                {% endif %}
+
+            </tbody>
+            <tbody>
+                <h3>Pagamentos no Dinheiro</h3>
+
+                {% for valor_total in context.dinheiro_day %}
+                            <p>Numero da Reserva: {{valor_total.num_reserva}} - Nome do Animal: {{valor_total.num_reserva.pet.nome}}, {{valor_total.num_reserva.pet.raca}} Data: {{valor_total.data|date:"d/m/Y"}} - Valor da Reserva: R$ {{ valor_total.total }}</p>
+                
+                {% endfor %}
+                {% if context.total_dinheiroday %}
+                    <p>Total das Reservas Day Care no Dinheiro: R$ {{context.total_dinheiroday}}</p>
+                {% endif %}
+            </tbody>
+            <tbody>
+                <h3>Pagamentos no Pix</h3>
+
+                {% for valor_total in context.pix_day %}
+                            <p>Numero da Reserva: {{valor_total.num_reserva}} - Nome do Animal: {{valor_total.num_reserva.pet.nome}}, {{valor_total.num_reserva.pet.raca}} Data: {{valor_total.data|date:"d/m/Y"}} - Valor da Reserva: R$ {{ valor_total.total }}</p>
+                {% endfor %}
+                {% if context.total_pixday %}
+                    <p>Total das Reservas Day Care no Pix: R$ {{context.total_pixday}}</p>
+                {% endif %}
+            </tbody>
+            <p> Total Reservas Day Care: R$ {{context.totalday}}</p>
+        </table>
+    {% endfor %}
+    <style>
+        * {
+            font-size: 11pt;
+        }
+        .hotel{
+            border: 2px solid black;
+        }
+        .re{
+            text-align:center;
+            font-size: 50px;
+        }
+    </style>
+</body>
+</html>

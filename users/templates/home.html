@@ -1,0 +1,165 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+  
+    <title>Página Inicial</title>
+  </head>
+  <body>
+    
+   <div class='corpo'>
+    <div class="form">
+      {% if usuario.is_authenticated %}
+        <h3>Usuário: {{usuario.username}}<h3>
+      {% endif %}
+      <img id="logo" src="{% static 'img/logo2.jpg' %}">
+
+      <h1>ZoePetSpa</h1>
+      <div class="ul">
+        <a href="{% url 'login' %}">Login</a>
+        <a href="{% url 'cadastro' %}">Novo Usuário</a>
+        <a href="{% url 'ficha:ficha' %}">Cadastrar Pet</a>
+        <a href="{% url 'ficha:lista' %}">Cães cadastrados</a>
+        <a href="{% url 'reserva' %}">Nova Reserva Hotel</a>
+        <a href="{% url 'reservaday' %}">Nova Reserva Day Care</a>
+        <a href="{% url 'reservar_banho' %}">Nova Reserva Banho</a>
+        <a href="{% url 'lista_reserva' %}">Reservas do Hotel em Andamento</a>
+        <a href="{% url 'lista_reservaday' %}">Reservas Day Care em Andamento</a>
+        <a href="{% url 'lista_reservabanho' %}">Reservas do Banho</a>
+        <a href="{% url 'historico_reserva' %}">Historico de Reservas</a>
+        <a href="{% url 'caixa:relatoriocaixa' %}">Gerar Relatório de Caixa</a>
+        <a href="{% url 'ficha:definir_vacina' %}">Definir Vacina</a>
+        <a href="{% url 'ficha:cadastrar_vacina' %}">Nova Vacina</a>
+        <a href="{% url 'pacote' %}">Pacotes</a>
+
+        <a href="{% url 'logout' %}">Sair</a><br><br>
+      </div>
+      {% load humanize %}
+    </div>
+    <div class='nascimento'>
+      <h2>Cachorros com Aniversário no Mês de {{mes}}</h2>
+      
+      {% if cachorros_aniversario %}
+      {% for cachorro in cachorros_aniversario %}
+        <p>Dog: {{ cachorro.nome }} - {{ cachorro.raca }} - {{ cachorro.data_de_nascimento|date:"d" }} de {{ cachorro.data_de_nascimento|date:"F" }}</p>
+      {% endfor %}
+
+      {% else %}
+      <p>Nenhum cachorro faz aniversário neste mês.</p>
+      {% endif %}
+
+      <h2>Cachorros com Aniversário no proximo Mês:</h2>
+      {% if aniversario %}
+      {% for ani in aniversario %}
+      <p>Dog: {{ ani.nome }} - {{ ani.raca }} - {{ ani.data_de_nascimento|date:"d" }} de {{ ani.data_de_nascimento|date:"F" }}</p>
+      {% endfor %}
+
+      {% else %}
+      <p>Nenhum cachorro faz aniversário próximo mês.</p>
+      {% endif %}
+      <h2>Cachorros com vacinas vencidas:</h2>
+      {% if vacinas_vencidas %}
+        {% for vacina in vacinas_vencidas %}
+      
+          <p>Animal: {{ vacina.animal_nome }} - {{ vacina.animal_raca }}</p>
+          <p>Vacina: {{ vacina.vacina_nome }}</p> 
+          <p>Data de Validade: {{ vacina.data_validade }}</p>
+          <p>--------------------------------------------</p>
+        {% endfor %}
+      
+      {% else %}
+        <p>Todos os animais estão com suas vacinas em dias.</p>
+      {% endif %}
+      <h2>Cachorros com vacinas de reforço atrasadas:</h2>
+      {% if vacinas_reforco %}
+        {% for vacina in vacinas_reforco %}
+      
+          <p>Animal: {{ vacina.animal_nome }} - {{ vacina.animal_raca }}</p>
+          <p>Vacina: {{ vacina.vacina_nome }}</p> 
+          <p>Data de Reforço: {{ vacina.data_reforco }}</p>
+          <p>--------------------------------------------</p>
+        {% endfor %}
+      
+      {% else %}
+        <p>Todos os animais estão com suas vacinas em dias.</p>
+      {% endif %}
+      </div>   
+        
+    </div>
+    <style>
+    body{
+      background-image: url('/static/img/fundo.jpeg');
+      background-size: contain;
+  }
+  .form{
+      height: auto;
+      border: 4px solid black;
+      width: auto;
+      display: flex;
+      align-items: center;
+      margin-left: 1%;
+      margin-bottom: 1%;
+      background-color: rgb(231, 141, 130);
+      border-radius: 5%;
+      flex-direction: column;
+      font-size: x-large;
+      display: inline-block;
+      padding-right:3%;
+  }
+
+  #logo{
+      margin-top: 10%;
+      width: 30%;
+      margin-left: 40%;
+      border-radius:20%;
+  }
+  .tabela{
+      height: 700px;
+      width: 600px;
+      display: flex;
+      
+  }
+  .ul{
+
+      display:flex;
+      flex-direction: column;
+  }
+  a{
+      text-decoration:none;
+      color: black;
+      padding: 1%;
+      text-align: left;
+      margin-left:15%;
+
+  }
+ 
+  h1{
+      text-align: center;
+  }
+  .nascimento{
+    height: auto;
+    border: 4px solid black;
+    width: auto;
+    display: flex;
+    align-items: center;
+    margin-left: 1%;
+    margin-bottom: 1%;
+    background-color: rgb(231, 141, 130);
+    border-radius: 5%;
+    font-size: x-large;
+    flex-direction: column;
+    text-decoration: none;
+    display: flex;
+    padding:1%;
+  }
+  .corpo{
+    display: flex;
+    gap: 10%;
+    
+  }
+
+  </style>  
+  
+  </body>
+</html>

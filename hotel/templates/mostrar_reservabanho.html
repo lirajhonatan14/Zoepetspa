@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style_proc.css' %}">
+    <title>Reserva Day Care</title>
+</head>
+<body>
+    <a class="home" href="{% url 'home' %}">Home</a>
+    <div class='form'>
+    <h1>Número da Reserva: {{animal.num_reserva}}</h1>
+
+        <p><strong>Nome do Animal:</strong> {{ animal.cachorro.nome }}</p>
+        <p><strong>Número da Reserva:</strong> {{ animal.num_reserva }}</p>
+        <p><strong>Data:</strong> {{ animal.data_reserva }}</p>
+        <p><strong>Hora de Entrada:</strong> {{ animal.hora_reserva }}</p>
+        <p><strong>Banhista:</strong> {{ animal.banhista }}</p>
+        
+        {%if animal.horario_personalizado%}
+            <p><strong>Horário Personalizado:</strong> {{ animal.horario_personalizado }}</p>
+        {%endif%}
+        {%if animal.servicos_adicionais%}
+            <p><strong>Tipo de Banho:</strong> {{ animal.servicos_adicionais }}</p>
+        {%endif%}
+        
+        {%if animal.status_pagamento == True%}
+            <p><strong>Pago:</strong> Sim</p>
+        {% else %}
+            <p><strong>Pago:</strong> Não</p>
+        {%endif%}
+        
+        <p><strong>Total:</strong> R$ {{ caixa.total }}</p>
+    
+    
+        <!-- Adicione outras informações que desejar mostrar -->
+    </div>
+</body>
+<style>
+    body{
+        background-image: url('/static/img/fundo.jpeg');
+      }
+      .form{
+        height: auto;
+        border: 4px solid black;
+        width: 40%;
+        margin-left: 5%;
+        background-color: rgb(231, 141, 130);
+        font-size: x-large;
+    } 
+    p{
+        margin-left: 5%;
+    }
+    .home{
+        font-size: 20px;
+        text-decoration: none;
+        color: black;
+        border: 2px solid  black;
+        background-color: rgb(231, 141, 130);
+        text-align: center;
+      }
+      h1{
+        margin-left: 5%;
+      }
+</style>
+</html>

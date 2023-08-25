@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style_caixa3.css' %}">
+    <title>Caixa Hotel</title>
+  </head>
+  <body>
+    <div class="form">  
+      <h1>Caixa Hotel</h1>
+      <div class='num'>
+        <label>Número da Reserva: {{ reserva.num_reserva }}<br>
+        <label>Nome:  {{ reserva.pet.nome}}<br>
+        <label>Usuário: {{ usuario}}
+      </div>
+      <br>
+      <form action="{% url 'caixa:caixa' num_reserva=reserva.num_reserva %}" method="post">
+        {% csrf_token %}
+       
+        {{ caixa_form.as_p }}
+        <input class="butao" type="submit" value="Concluir Reserva">
+        <!-- ... -->
+    </form>
+
+        <h2>Serviços adicionais</h2>
+        <label>
+            {{ reserva.servicos_adicionais.nome_servico }} - R$ {{ reserva.servicos_adicionais.valor_servico }}
+        </label>
+      
+    
+        <div class="alinha">  
+          <a href="{% url 'home' %}">Página Inicial</a>
+
+        </div>
+        
+      
+    
+    </div>
+    
+  </body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style_proc.css' %}">
+    <title>Reserva Day Care</title>
+</head>
+<body>
+    <a href="{% url 'home' %}">Home</a>
+    <h1>Reserva número:{{animal.num_reserva}}</h1>
+    <div class='form'>
+        <p><strong>Nome do Animal:</strong> {{ animal.pet.nome }}</p>
+        <p><strong>Número da Reserva:</strong> {{ animal.num_reserva }}</p>
+        <p><strong>Data:</strong> {{ animal.data }}</p>
+        <p><strong>Hora de Entrada:</strong> {{ animal.hora_entrada }}</p>
+        <p><strong>Usuário:</strong> {{ animal.usuario }}</p>
+        <p><strong>Horário da Alimentação:</strong> {{ animal.horario_alimentacao}}</p>
+        {%if animal.horario_personalizado%}
+            <p><strong>Horário Personalizado:</strong> {{ animal.horario_personalizado }}</p>
+        {%endif%}
+        <p><strong>Instruções de Medicamentos:</strong> {{ animal.instrucoes_medicamentos }}</p>
+        <p><strong>Autorização para Cuidados Medicos:</strong> {{ animal.autorizacao_para_cuidados_medicos }}</p>
+        {%if animal.servicos_adicionais%}
+            <p><strong>Serviços Adicionais:</strong> {{ animal.servicos_adicionais }}</p>
+        {%endif%}
+        {%if animal.pacote%}
+            <p><strong>Pacote:</strong> {{ animal.pacote }}</p>
+        {%endif%}
+        {%if animal.pago == True%}
+            <p><strong>Pagamento:</strong> Pago</p>
+        {%endif%}
+        <p><strong>Total:</strong> {{ animal.observacoes }}</p>
+    
+    
+        <!-- Adicione outras informações que desejar mostrar -->
+    </div>
+</body>
+</html>

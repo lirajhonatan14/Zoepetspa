@@ -8,11 +8,12 @@ class DogForm(forms.ModelForm):
         widgets = {
             'data': forms.HiddenInput(),
         }
+        
 
 class VacinaForm(forms.ModelForm):
     class Meta:
         model = Vacina
-        fields = ['nome', 'validade','data_reforco']
+        fields = ['nome', 'validade','nova_dose']
         widgets = {
         }
 class VacinaAnimalForm(forms.ModelForm):

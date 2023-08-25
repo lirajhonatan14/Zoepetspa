@@ -1,5 +1,4 @@
 from django.contrib.auth import logout
-from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from ficha.models import FichaDog, VacinaAnimal
 from datetime import datetime, timedelta
@@ -11,27 +10,19 @@ def logout_view(request):
 from datetime import date
 def verificar_vacina():
     vacinas_vencidas = []
-    vacinas_reforco = []
-    # Obtenha todos os objetos VacinaAnimal
+    validade = []
+    
     vacina_animal_objs = VacinaAnimal.objects.all()
-
-    # Verifique a validade e a data de reforço das vacinas para cada objeto VacinaAnimal
     for vacina_animal in vacina_animal_objs:
         vacina = vacina_animal.vacina
 
-        # Verifique se a vacina está vencida
+        proxima_dose = vacina_animal.data_administracao + timedelta(days=vacina.nova_dose)
 
-        if vacina.validade <= date.today():
+        if proxima_dose <= date.today():
             vacinas_vencidas.append(vacina_animal)
-            
-        
-
-        # Verifique se a vacina está no período de reforço
-        if vacina.data_reforco and vacina.data_reforco <= date.today():
-            vacinas_reforco.append(vacina_animal)
-            
-            
-    return vacinas_vencidas, vacinas_reforco
+            validade.append(proxima_dose.strftime('%d/%m/%Y'))  # Formata a data como string
+   
+    return vacinas_vencidas, validade
 
 
 def lembrardatanasc(mes):
@@ -54,7 +45,7 @@ def home(request, mes=None):
     animal = FichaDog.objects.all()
     usuario = request.user
     cachorros_aniversario = FichaDog.objects.filter(data_de_nascimento__month=mes)
-    vacinas_vencidas, vacinas_reforco = verificar_vacina()
+    vacinas_vencidas, validade = verificar_vacina()
     vacinas_vencidas_info = []
 
 # Lista para armazenar as informações das vacinas no período de reforço
@@ -71,14 +62,7 @@ def home(request, mes=None):
         }
         vacinas_vencidas_info.append(vacina_info)
 
-    for vacina_animal in vacinas_reforco:
-        vacina_info = {
-            'animal_nome': vacina_animal.pet.nome,
-            'animal_raca': vacina_animal.pet.raca,
-            'vacina_nome': vacina_animal.vacina.nome,
-            'data_reforco': vacina_animal.vacina.data_reforco,
-        }
-        vacinas_reforco_info.append(vacina_info)
+
 
     # Adicione as listas de informações no contexto para exibir no template HTML
     
@@ -123,7 +107,7 @@ def home(request, mes=None):
         
     context = {
         'vacinas_vencidas': vacinas_vencidas_info,
-        'vacinas_reforco': vacinas_reforco_info,
+        'validade': validade,
         'cachorros_aniversario': cachorros_aniversario,
         'mes':mesnome,
         'proxmes':proxmes,

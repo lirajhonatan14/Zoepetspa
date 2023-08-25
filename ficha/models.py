@@ -26,8 +26,8 @@ class FichaDog(models.Model):
 
 class Vacina(models.Model):
     nome = models.CharField(max_length=100)
-    validade = models.DateField()
-    data_reforco = models.DateField()
+    validade = models.CharField(max_length=50)
+    nova_dose = models.IntegerField()
     # outros campos do modelo Vacina
 
     class Meta:

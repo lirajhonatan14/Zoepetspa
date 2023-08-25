@@ -70,10 +70,11 @@ class ReservaBanho(models.Model):
     data_reserva = models.DateField()
     hora_reserva = models.TimeField()
     banhista = models.ForeignKey(User, on_delete=models.CASCADE)
-    cachorro = models.ForeignKey(FichaDog, on_delete=models.CASCADE)
+    cachorro = models.CharField(max_length=100)
     tipo_banho = models.ForeignKey('hotel.ServicosAdicionais', on_delete=models.CASCADE)
     status_de_pagamento = models.BooleanField(default=False, null=True, choices=[(False, 'Não Pago'), (True, 'Pago')])
-    observacoes = models.TextField(max_length=100)
+    observacoes = models.TextField(max_length=100, blank=True, null=True)
+    total = models.CharField(max_length=50, blank=True, null=True)
     def __str__(self):
         return f"Reserva de banho para {self.cachorro.nome} em {self.data_reserva}"
 class ServicosAdicionais(models.Model):

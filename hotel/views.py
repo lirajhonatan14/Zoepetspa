@@ -74,7 +74,7 @@ def pacote(request):
 @login_required(login_url="/auth/login/")
 def reserva_list(request):
     hoje = date.today()  # obtém a data atual
-    reservas = Reserva.objects.filter(pago=False)
+    reservas = Reserva.objects.filter(pago=False).order_by('data_entrada')
 
     context = {
         'reservas': reservas
@@ -84,16 +84,18 @@ def reserva_list(request):
 @login_required(login_url="/auth/login/")
 def reservaday_list(request):
     hoje = date.today()  # obtém a data atual
-    reservas = ReservaDay.objects.filter(pago=False)
-    reservas.pago = True
+    reservas = ReservaDay.objects.filter(pago=False).exclude(pacote__nome="Meia Diária/ Avaliação").order_by('data')
+    avaliacao = ReservaDay.objects.filter(pago=False, pacote__nome='Meia Diária/ Avaliação').order_by('data')
+
     context = {
-        'reservas': reservas
+        'reservas': reservas,
+        'avaliacao': avaliacao
+
     }
     return render(request, 'lista_reservasday.html', context)
-
 @login_required(login_url="/auth/login/")
 def reservabanho_list(request):
-    reservas = ReservaBanho.objects.filter()
+    reservas = ReservaBanho.objects.filter().order_by('data_reserva')
     
     
    

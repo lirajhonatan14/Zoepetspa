@@ -15,7 +15,7 @@ class Reservaform(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['servicos_adicionais'].queryset = ServicosAdicionais.objects.all()
-        
+        self.fields['pet'].queryset = self.fields['pet'].queryset.order_by('nome')
     def save(self, commit=True):
         reserva = super().save(commit=False)
         if commit:
@@ -37,7 +37,7 @@ class ReservaDayForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['servicos_adicionais'].queryset = ServicosAdicionais.objects.all()
-        
+        self.fields['pet'].queryset = self.fields['pet'].queryset.order_by('nome')
     def save(self, commit=True):
         reserva = super().save(commit=False)
         if commit:
@@ -57,6 +57,9 @@ class ReservaBanhoForm(forms.ModelForm):
             reserva.save()
         self.save_m2m()
         return reserva
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['cachorro'].queryset = self.fields['cachorro'].queryset.order_by('nome')
     
     
 

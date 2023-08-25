@@ -22,7 +22,7 @@ def ficha(request):
 
 @login_required(login_url="/auth/login/")
 def lista_fichas_cachorros(request):
-    cachorros = FichaDog.objects.all()
+    cachorros = FichaDog.objects.all().order_by('nome')
     search = request.GET.get('search') 
     if search:
         cachorros = cachorros.filter(nome__icontains=search) 

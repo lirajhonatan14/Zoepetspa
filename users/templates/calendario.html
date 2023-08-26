@@ -1,53 +1,150 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <title>Calendário</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.js"></script>
+<meta charset='utf-8' />
+<!-- Adicione isso na seção head do seu HTML -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<script src="{% static 'fullcalendar/dist/index.global.min.js' %}"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+
+<!-- Scripts do Bootstrap -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var calendarEl = document.getElementById('calendar');
+    var currentDate = new Date();
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+      initialDate: currentDate,
+      initialView: 'dayGridMonth',
+      headerToolbar: {
+        left: 'prev,next today',
+        center: 'title',
+        right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+      },
+      height: 'auto',
+      navLinks: false, // can click day/week names to navigate views
+      editable: false,  
+      selectable: true,
+      selectMirror: true,
+      nowIndicator: true,
+      eventOverlap: false,
+      locale: 'pt-br',
+      
+      events: [
+        // Lista de eventos do calendário
+                    // Por exemplo, { title: 'Evento 1', start: '2023-06-14' }
+
+            {% for reserva in reservas %}
+                {
+                    id: '{{ reserva.num_reserva }}',
+                    title: '{{ reserva.pet.nome }} - {{ reserva.pet.raca }}',
+                    start: '{{ reserva.data_entrada|date:"Y-m-d" }}T{{ reserva.hora_entrada }}',
+                    end: '{{ reserva.data_saida|date:"Y-m-d"}}',
+                    color: 'green',
+                },
+            {% endfor %}
+            {% for reserva in reservasday %}
+                {
+                    id: '{{ reserva.num_reserva }}',
+                    title: '{{ reserva.pet.nome }} - {{ reserva.pet.raca }}',
+                    start: '{{ reserva.data|date:"Y-m-d" }}T{{ reserva.hora_entrada }}',
+                    color: 'blue',
+                },
+            {% endfor %}
+            {% for reserva in reservasbanho %}
+                {
+                    id: '{{ reserva.num_reserva }} - {{ reserva.tipo_banho }}',
+                    title: '{{ reserva.cachorro }}',
+                    descricao: '{{ reserva.tipo_banho }}',
+                    start: '{{ reserva.data_reserva|date:"Y-m-d" }}T{{ reserva.hora_reserva }}',
+                    color: 'pink',
+                },
+            {% endfor %}
+        ],
+        eventClick: function(info) {
+            console.log('Event clicked:', info);
+            var event = info.event;
+            var modalEl = document.getElementById('eventModal');
+            var modalTitle = modalEl.querySelector('.modal-title');
+            var modalBody = modalEl.querySelector('.modal-body');
+
+            var formatDateTime = 'DD/MM/YYYY HH:mm'; // Formato desejado
+
+            if (event.backgroundColor === 'green') {
+                // Evento de Reserva Hotel
+                modalTitle.textContent = 'Detalhes da Reserva Hotel';
+                modalBody.innerHTML = 'Nº da Reserva: #' + event.id + '<br>' +
+                                    'Pet: ' + event.title + '<br>' +
+                                    'Data de Entrada/Hora: ' + moment(event.start).format(formatDateTime) + '<br>' +
+                                    'Data de Saída: ' + moment(event.end).format(formatDateTime);
+            } else if (event.backgroundColor === 'blue') {
+                // Evento de Reserva Day Care
+                modalTitle.textContent = 'Detalhes da Reserva Day Care';
+                modalBody.innerHTML = 'Nº da Reserva: #' + event.id + '<br>' +
+                                    'Pet: ' + event.title + '<br>' +
+                                    'Data/Hora: ' + moment(event.start).format(formatDateTime);
+            } else if (event.backgroundColor === 'pink') {
+                // Evento de Reserva Banho
+                modalTitle.textContent = 'Detalhes da Reserva Banho';
+                modalBody.innerHTML = 'Nº da Reserva: #' + event.id + '<br>' +
+                                    'Cachorro: ' + event.title + '<br>' +
+                                    'Descrição: ' + event.descricao + '<br>' +
+                                    'Data/Hora: ' + moment(event.start).format(formatDateTime);
+            }
+
+            var modal = new bootstrap.Modal(modalEl);
+            modal.show();
+        }
+
+        });
+
+    calendar.render();
+  });
+
+</script>
+<style>
+
+  body {
+    
+    padding: 0;
+    font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
+    font-size: 14px;
+  }
+
+  #calendar {
+    max-width: auto;
+    margin: 0 auto;
+  }
+
+</style>
 </head>
 <body>
-    <div class="container">
-        <div id="calendar"></div>
-    </div>
 
-    <script>
-        $(document).ready(function() {
-            $('#calendar').fullCalendar({
-                header: {
-                    left: 'prev,next today',
-                    center: 'title',
-                    right: 'month,agendaWeek,agendaDay'
-                },
-                defaultView: 'month',
-                editable: false, // Desabilitar edição dos eventos
-                events: [
-                    {% for reserva in reservas %}
-                        {
-                            title: '{{ reserva.cachorro.nome }}',
-                            start: '{{ reserva.data_reserva|date:"Y-m-d" }}T{{ reserva.hora_reserva|time:"H:i:s" }}',
-                            url: '/reserva/{{ reserva.num_reserva }}',
-                            color: 'green',
-                            description: '{{ reserva.cachorro.nome }} - {{ reserva.num_reserva }}'
-                        },
-                    {% endfor %}
-                ],
-                eventRender: function(event, element) {
-                    element.attr('title', event.description);
-                },
-                eventClick: function(calEvent, jsEvent, view) {
-                    window.location.href = calEvent.url;
-                }
-            });
-        });
-    </script>
-    <style>
-        .fc-event {
-            background-color: green !important;
-        }
-    </style>
+  <div id='calendar'></div>
+  <div class="modal fade" id="eventModal" tabindex="-1" aria-labelledby="eventModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="eventModalLabel">Detalhes do Evento</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <!-- As informações do evento serão preenchidas aqui via JavaScript -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+  
+  
+  
+  
+  
 </body>
 </html>

@@ -299,4 +299,20 @@ def reservar_banho(request):
     return render(request, 'reserva_banho.html', context)
 
 
+def calendarido(request):
+    reservas = Reserva.objects.all()
+    context = {'reservas': reservas}
+    return render(request, 'calendario.html', context)
+def get_reservas(request):
+    reservas = Reserva.objects.all()
+    reservasday = ReservaDay.objects.all()
+    reservasbanho = ReservaBanho.objects.all()
 
+
+    context = {
+        'reservas': reservas,
+        'reservasday':reservasday,
+        'reservasbanho':reservasbanho,
+
+        }
+    return render(request, 'calendario.html', context)

@@ -2,10 +2,68 @@
 <html>
 <head>
     <title>Relatorio de Caixa</title>
+    <style>
+    body{
+        background-image: url('/static/img/fundo.jpeg');
+    }
+    h1{
+        font-size: 40px;
+        text-align: center;
+    }
+    .form{
+        height: 400px;
+        border: 4px solid black;
+        width: 40%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-left: 29%;
+        margin-top: 10%;
+        background-color: rgb(231, 141, 130);
+        border-radius: 5%;
+        flex-direction: column;
+    }
+    .form label{
+        font-size: xx-large;
+    }
+    
+    .caixa{
+        width: 41%;
+        height: 15%;
+    }
+    .caixa1{
+        width: 60%;
+        height: 15%;
+    }
+    .butao{
+        display: flex;
+        align-items: center;
+        height: 40px;
+        width: 120px;
+        margin-top: 5%;
+        border-radius: 10%;
+        background-color: rgb(139, 124, 111);
+        font-size: medium;
+    
+    }
+    .butao:hover{
+        display: flex;
+        align-items: center;
+        height: 40px;
+        width: 120px;
+        margin-top: 5%;
+        border-radius: 10%;
+        background-color: rgb(151, 141, 132);
+        font-size: medium;
+        cursor: pointer;
+    }
+</style>    
 </head>
 <body>
+    <a href="{% url 'home' %}">Home</a>
+
     <h1>Relatório de Caixa</h1>
-    <form method="post" action="">
+    <form class="form" method="post" action="">
         {% csrf_token %}
         <label for="mes">Mês:</label>
         <select id="mes" name="mes">
@@ -24,7 +82,15 @@
         </select>
         <label for="ano">Ano:</label>
         <input type="number" name="ano"  max="9999">
-        <input type="submit" value="Gerar Relatório">
+        <label for="tipo_reserva">Tipo de Reserva:</label>
+        <select id="tipo_reserva" name="tipo_reserva">
+                <option value="hotel">Hotel</option>
+                <option value="day_care">Day Care</option>
+                <option value="banho">Banho</option>
+                
+        </select>
+        <input class="butao" type="submit" value="Gerar Relatório">
     </form>
+    
 </body>
 </html>

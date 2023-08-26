@@ -77,7 +77,7 @@
       </div>
     </div>
     <div class='nascimento'>
-      <iframe class="calendario" src="{% url '  calendario' %}" width="90%" height="800px"></iframe>
+      <iframe class="calendario" src="{% url 'calendario' %}" width="90%" height="800px"></iframe>
       <h2>Cachorros com Aniversário no Mês de {{mes}}</h2>
 
       {% if cachorros_aniversario %}
@@ -104,7 +104,7 @@
 
           <p>Animal: {{ vacina.animal_nome }} - {{ vacina.animal_raca }}</p>
           <p>Vacina: {{ vacina.vacina_nome }}</p>
-          <p>Data de Validade: {{ vacina.data_validade }}</p>
+          <p>Data de Validade: {{ validade }}</p>
           <p>--------------------------------------------</p>
         {% endfor %}
 

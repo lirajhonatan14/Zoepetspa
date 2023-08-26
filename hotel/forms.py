@@ -50,6 +50,7 @@ class ReservaBanhoForm(forms.ModelForm):
         model = ReservaBanho
         fields = ['data_reserva','hora_reserva','cachorro','tipo_banho','banhista', 'status_de_pagamento', 'observacoes']
         widgets = {
+             'total':forms.HiddenInput(),
         }
     def save(self, commit=True):
         reserva = super().save(commit=False)

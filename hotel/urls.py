@@ -21,5 +21,8 @@ urlpatterns = [
         path('renovar_pacote/', views.pacote, name='pacote'),
         path('pacote_renovado/', views.pacote_reservado, name='pacote_reservado'),
         path('reservar_banho/', views.reservar_banho, name='reservar_banho'),
+        #path('calendario/', views.calendario, name='calendario'),
+        path('calendario/', views.get_reservas, name='calendario'),
+
         
     ]

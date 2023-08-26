@@ -34,7 +34,6 @@
                 <th>Nome da vacina</th>
                 <th>Data de aplicação</th>
                 <th>Data de validade</th>
-                <th>Data de reforço</th>
             </tr>
             </thead>
             {% for ani in vacina %}
@@ -43,8 +42,7 @@
                 <tr>
                     <td>{{ ani.vacina.nome }}</td>
                     <td>{{ ani.data_administracao |date:"d/m/Y"}}</td>
-                    <td>{{ ani.vacina.validade |date:"d/m/Y"}}</td>
-                    <td>{{ ani.vacina.data_reforco |date:"d/m/Y"}}</td>
+                    <td>{{ validade |date:"d/m/Y"}}</td>
                 </tr>
                 
             </tbody>

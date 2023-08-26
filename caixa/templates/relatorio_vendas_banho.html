@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
     <title>Relatório de Caixa Banho</title>
     <style>
         @page {
@@ -29,10 +30,14 @@
         tr:nth-child(even) {
             background-color: #f2f2f2;
         }
+        .h1{
+            text-align: center;
+            font-size: 30px;
+        }
     </style>
 </head>
 <body>
-    <h1>Relatório de Caixa Banho</h1>
+    <h1 class="h1">Relatório de Caixa Banho</h1>
     <table>
         <thead>
             <tr>
@@ -45,11 +50,12 @@
             {% for caixa in caixas_filtrados %}
                 <tr>
                     <td>{{ caixa.data_reserva }}</td>
-                    <td>{{ caixa.descricao }}</td>
-                    <td>{{ caixa.valor }}</td>
+                    <td>Nº da Reserva: {{ caixa.num_reserva }}, {{ caixa.cachorro }} - {{ caixa.tipo_banho }}</td>
+                    <td>{{ caixa.total }}</td>
                 </tr>
             {% endfor %}
         </tbody>
     </table>
+    <h2>Valor total do mês: R$ {{ valor_total }}</h2>
 </body>
 </html>

@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Relatório de Caixa</title>
+    <meta charset="UTF-8">
+    <title>Relatório de Caixa Hotel</title>
     <style>
         @page {
             size: landscape;
@@ -29,27 +30,37 @@
         tr:nth-child(even) {
             background-color: #f2f2f2;
         }
+        .h1{
+            text-align: center;
+            font-size: 30px;
+        }
     </style>
 </head>
 <body>
-    <h1>Relatório de Caixa</h1>
+    <h1 class="h1">Relatório de Caixa Hotel</h1>
     <table>
         <thead>
             <tr>
-                <th>Data</th>
+                <th>Data Entrada</th>
+                <th>Data Saída</th>
                 <th>Descrição</th>
+                <th>Método de Pagamento</th>
+
                 <th>Valor</th>
             </tr>
         </thead>
         <tbody>
             {% for caixa in caixas_filtrados %}
                 <tr>
-                    <td>{{ caixa.data }}</td>
-                    <td>{{ caixa.descricao }}</td>
-                    <td>{{ caixa.valor }}</td>
+                    <td>{{ caixa.num_reserva.data_entrada }}</td>
+                    <td>{{ caixa.num_reserva.data_saida }}</td>
+                    <td>Nº da Reserva: {{ caixa.num_reserva }}, {{ caixa.pet }} </td>
+                    <td>{{ caixa.metodo_de_pagamento }}</td>
+                    <td>{{ caixa.total }}</td>
                 </tr>
             {% endfor %}
         </tbody>
     </table>
+    <h2>Valor total do mês: R$ {{ valor_total }}</h2>
 </body>
 </html>

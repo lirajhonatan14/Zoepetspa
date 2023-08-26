@@ -21,7 +21,7 @@ def verificar_vacina():
         if proxima_dose <= date.today():
             vacinas_vencidas.append(vacina_animal)
             validade.append(proxima_dose.strftime('%d/%m/%Y'))  # Formata a data como string
-   
+            
     return vacinas_vencidas, validade
 
 @login_required(login_url="/auth/login/")
@@ -45,7 +45,8 @@ def home(request, mes=None):
     animal = FichaDog.objects.all()
     usuario = request.user
     cachorros_aniversario = FichaDog.objects.filter(data_de_nascimento__month=mes)
-    vacinas_vencidas, validade = verificar_vacina()
+    vacinas_vencidas, validadee = verificar_vacina()
+    
     vacinas_vencidas_info = []
 
 # Lista para armazenar as informações das vacinas no período de reforço
@@ -53,6 +54,8 @@ def home(request, mes=None):
 
     # Preenchendo as listas com as informações das vacinas
     for vacina_animal in vacinas_vencidas:
+        dias = vacina_animal.vacina.nova_dose
+        validade = vacina_animal.data_administracao + timedelta(days=dias)
         vacina_info = {
             'animal_nome': vacina_animal.pet.nome,
             'animal_raca': vacina_animal.pet.raca,

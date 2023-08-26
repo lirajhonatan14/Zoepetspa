@@ -18,47 +18,85 @@ from django.db.models import Sum
 from datetime import date
 from decimal import Decimal
 
-def relatorio_caixa(request):
-    if request.method == 'POST':
-        mes = request.POST.get('mes')
-        ano = request.POST.get('ano')
-        
-        # Fazendo a consulta para filtrar os itens da tabela Caixa
-        caixas_filtrados = Caixa.objects.filter(data__month=mes, data__year=ano)
-        
-        context = {
-            'caixas_filtrados': caixas_filtrados,
-        }
-        return render(request, 'relatorio_vendas.html', context)
-    
-    return render(request, 'relatorios.html')
+
 
 def relatorios(request):
     if request.method == 'POST':
         mes = request.POST.get('mes')
         ano = request.POST.get('ano')
-        
+        tipo_reserva = request.POST.get('tipo_reserva')
+
+        if tipo_reserva == 'hotel':
         # Fazendo a consulta para filtrar os itens da tabela Caixa
-        caixas_filtrados = Caixa.objects.filter(data__month=mes, data__year=ano)
-        
-        context = {
+            caixas_filtrados = Caixa.objects.filter(data__month=mes, data__year=ano).order_by('data')
+            valor_total = Caixa.objects.filter(data__month=mes, data__year=ano).aggregate(total=Sum('total'))['total']
+            context = {
             'caixas_filtrados': caixas_filtrados,
-        }
+            'valor_total':valor_total,
+            }
+            
+            template_path = 'relatorio_vendas.html'
+            template = get_template(template_path)
+            html = template.render(context)
+
+            # Create a BytesIO buffer to receive the PDF output
+            buffer = io.BytesIO()
+
+            # Generate the PDF output using the BytesIO buffer
+            pdf = pisa.pisaDocument(io.BytesIO(html.encode("UTF-8")), buffer)
+
+            # Return the PDF as an HTTP response
+            response = HttpResponse(buffer.getvalue(), content_type='application/pdf')
+            response['Content-Disposition'] = 'filename="relatorio_caixa.pdf"'
+            return response
         
-        template_path = 'relatorio_vendas.html'
-        template = get_template(template_path)
-        html = template.render(context)
+        elif tipo_reserva == 'day_care':
+            caixas_filtrados = CaixaDay.objects.filter(data__month=mes, data__year=ano).order_by('data')
+            valor_total = CaixaDay.objects.filter(data__month=mes, data__year=ano).aggregate(total=Sum('total'))['total']
 
-        # Create a BytesIO buffer to receive the PDF output
-        buffer = io.BytesIO()
 
-        # Generate the PDF output using the BytesIO buffer
-        pdf = pisa.pisaDocument(io.BytesIO(html.encode("UTF-8")), buffer)
+            context = {
+            'caixas_filtrados': caixas_filtrados,
+            'valor_total':valor_total,
+            }
+            
+            template_path = 'relatorio_vendas_day.html'
+            template = get_template(template_path)
+            html = template.render(context)
 
-        # Return the PDF as an HTTP response
-        response = HttpResponse(buffer.getvalue(), content_type='application/pdf')
-        response['Content-Disposition'] = 'filename="relatorio_caixa.pdf"'
-        return response
+            # Create a BytesIO buffer to receive the PDF output
+            buffer = io.BytesIO()
+
+            # Generate the PDF output using the BytesIO buffer
+            pdf = pisa.pisaDocument(io.BytesIO(html.encode("UTF-8")), buffer)
+
+            # Return the PDF as an HTTP response
+            response = HttpResponse(buffer.getvalue(), content_type='application/pdf')
+            response['Content-Disposition'] = 'filename="relatorio_caixa_day.pdf"'
+            return response
+        elif tipo_reserva == 'banho':
+            caixas_filtrados = ReservaBanho.objects.filter(data_reserva__month=mes, data_reserva__year=ano).order_by('data_reserva')
+            valor_total = ReservaBanho.objects.filter(data_reserva__month=mes, data_reserva__year=ano).aggregate(total=Sum('total'))['total']
+            context = {
+            'caixas_filtrados': caixas_filtrados,
+            'valor_total':valor_total,
+            }
+            
+            template_path = 'relatorio_vendas_banho.html'
+            template = get_template(template_path)
+            html = template.render(context)
+
+            # Create a BytesIO buffer to receive the PDF output
+            buffer = io.BytesIO()
+
+            # Generate the PDF output using the BytesIO buffer
+            pdf = pisa.pisaDocument(io.BytesIO(html.encode("UTF-8")), buffer)
+
+            # Return the PDF as an HTTP response
+            response = HttpResponse(buffer.getvalue(), content_type='application/pdf')
+            response['Content-Disposition'] = 'filename="relatorio_caixa_banho.pdf"'
+            return response 
+        
     
     return render(request, 'relatorios.html')
 

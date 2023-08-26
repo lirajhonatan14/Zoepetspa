@@ -30,10 +30,10 @@
               {% if reservas.status_pagamento == True %}
                 <td class='num'>{{ reserva.num_reserva }}</td>
               {% else %}
-              <td class='num'><a href="{% url 'caixa:caixabanho' num_reserva=reserva.pk %}" class="btn btn-primary">{{ reserva.num_reserva }}</td>
+              <td class='num'>{{ reserva.num_reserva }}</td>
                 
               {% endif %}
-              <td class='nome'>{{ reserva.cachorro.nome}}</td>
+              <td class='nome'>{{ reserva.cachorro}}</td>
               <td class='data'>{{ reserva.data_reserva |date:"d/m/Y"}}</td>
               <td class='entrada'>{{ reserva.hora_reserva }}</td>
               <td class='tipo'>{{ reserva.tipo_banho }}</td>

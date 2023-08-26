@@ -6,6 +6,8 @@ from ficha.models import FichaDog, VacinaAnimal, Vacina
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404
 from django.contrib import messages
+from datetime import datetime, timedelta, date
+
 @login_required(login_url="/auth/login/")
 def ficha(request):
     if request.method == 'POST':
@@ -35,18 +37,38 @@ def puxar_ficha(request):
     animais = FichaDog.objects.all()
     return render(request, 'proc_ficha.html', {'animais': animais})
 
+def verificar_vacina():
+    vacinas_vencidas = []
+    validade = []
+    
+    vacina_animal_objs = VacinaAnimal.objects.all()
+    for vacina_animal in vacina_animal_objs:
+        vacina = vacina_animal.vacina
 
+        proxima_dose = vacina_animal.data_administracao + timedelta(days=vacina.nova_dose)
+
+        if proxima_dose <= date.today():
+            vacinas_vencidas.append(vacina_animal)
+            validade.append(proxima_dose.strftime('%d/%m/%Y'))  # Formata a data como string
+   
+    return vacinas_vencidas, validade
 @login_required(login_url="/auth/login/")
 def mostrar_ficha(request, nome):
+    validade = []
     try:
         animal = FichaDog.objects.get(nome=nome)
         vacina = VacinaAnimal.objects.filter(pet=nome).all()
+        
+        for vacina_animal in vacina:
+            dias = vacina_animal.vacina.nova_dose
+            validade = vacina_animal.data_administracao + timedelta(days=dias)
+
     except FichaDog.DoesNotExist:
         # Lógica de tratamento caso o animal não seja encontrado
         return HttpResponse("Animal não encontrado")
     else:
         # Lógica para exibir a ficha do animal
-        return render(request, 'mostrar_ficha.html', {'animal': animal, 'vacina':vacina})
+        return render(request, 'mostrar_ficha.html', {'animal': animal, 'vacina':vacina, 'validade':validade})
 @login_required(login_url="/auth/login/")
 def cadastrar_vacina(request):
     if request.method == 'POST':
@@ -56,14 +78,13 @@ def cadastrar_vacina(request):
         return redirect('ficha:cadastrar_vacina')
     else:
         form = VacinaForm()
-    messages.success(request, 'Vacina cadastrada com sucesso.')
     return render(request, 'cadastrar_vacina.html', {'form':form})
 @login_required(login_url="/auth/login/")
 def definir_vacina(request):
     if request.method == 'POST':
         form = VacinaAnimalForm(request.POST)
         form.save()
-        messages.success(request, 'Cadastro realizado com sucesso.')
+        messages.success(request, 'Vacina cadastrada com sucesso!')
         return redirect('ficha:definir_vacina')
     else:
         form = VacinaAnimalForm()

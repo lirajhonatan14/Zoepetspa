@@ -96,7 +96,7 @@ def reservaday_list(request):
 @login_required(login_url="/auth/login/")
 def reservabanho_list(request):
     reservas = ReservaBanho.objects.filter().order_by('data_reserva')
-    
+    #atualizar_total_reservas_banho() 
     
    
     context = {
@@ -106,12 +106,12 @@ def reservabanho_list(request):
     }
     return render(request, 'lista_reservabanho.html', context)
 from django.db.models import F
-@login_required(login_url="/auth/login/")
+
 def atualizar_total_reservas_banho():
     reservas_banho = ReservaBanho.objects.all()
     
     for reserva in reservas_banho:
-        total = reserva.valor_servico
+        total = reserva.tipo_banho.valor_servico
         # Qualquer outra lógica para calcular o total pode ser adicionada aqui
         reserva.total = total
         reserva.save()
@@ -125,7 +125,7 @@ def proc_reserva(request):
     reservasday = ReservaDay.objects.all().exclude(pacote__nome="Meia Diária/ Avaliação").order_by('data')
     reservasdayav = ReservaDay.objects.filter(pacote__nome='Meia Diária/ Avaliação').order_by('data')
     reservasbanho = ReservaBanho.objects.all().order_by('data_reserva')
-    #atualizar_total_reservas_banho() precisa tirar de comentario essa linha depois
+    
     search = request.GET.get('search')
     if search:
         reservas = reservas.filter(pet__nome__icontains=search).order_by('data_entrada')
@@ -298,11 +298,12 @@ def reservar_banho(request):
     }
     return render(request, 'reserva_banho.html', context)
 
-
+@login_required(login_url="/auth/login/")
 def calendarido(request):
     reservas = Reserva.objects.all()
     context = {'reservas': reservas}
     return render(request, 'calendario.html', context)
+@login_required(login_url="/auth/acesso_negado/")
 def get_reservas(request):
     reservas = Reserva.objects.all()
     reservasday = ReservaDay.objects.all()

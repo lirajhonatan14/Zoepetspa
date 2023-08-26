@@ -19,7 +19,7 @@ from datetime import date
 from decimal import Decimal
 
 
-
+@login_required(login_url="/auth/login/")
 def relatorios(request):
     if request.method == 'POST':
         mes = request.POST.get('mes')
@@ -173,7 +173,7 @@ def caixa_hotel(request, num_reserva):
 
 
 
-
+@login_required(login_url="/auth/login/")
 def caixa_day(request, num_reserva):
     reserva = ReservaDay.objects.get(num_reserva=num_reserva)
     nome = reserva.pet_id
@@ -216,7 +216,7 @@ def caixa_day(request, num_reserva):
         'caixa_form': caixa_form,
     }
     return  render(request, 'caixa_day.html', context)
-
+@login_required(login_url="/auth/login/")
 def caixa_banho(request, num_reserva):
     reserva = ReservaBanho.objects.get(num_reserva=num_reserva)
 
@@ -264,7 +264,7 @@ def diminuir_horas(tempo, horas):
     dt_novo = dt_tempo - timedelta(hours=horas)
     tempo_novo = dt_novo.time()
     return tempo_novo
-
+@login_required(login_url="/auth/login/")
 def relatorio_reservas(request, num_reserva):
     # Get the Caixa objects for the given num_reserva
     caixas = Caixa.objects.filter(num_reserva=num_reserva)
@@ -337,7 +337,7 @@ def relatorio_reservas(request, num_reserva):
     response = HttpResponse(buffer.getvalue(), content_type='application/pdf')
     response['Content-Disposition'] = 'filename="relatorio_reservas.pdf"'
     return response
-
+@login_required(login_url="/auth/login/")
 def relatorio_reservasday(request, num_reserva):
     caixas = CaixaDay.objects.filter(num_reserva=num_reserva)
     hora = timezone.now().time()
@@ -417,8 +417,7 @@ def relatorio_reservasday(request, num_reserva):
     response = HttpResponse(buffer.getvalue(), content_type='application/pdf')
     response['Content-Disposition'] = 'filename="relatorio_reservasday.pdf"'
     return response
-
-
+@login_required(login_url="/auth/login/")
 def relatorio_reservasbanho(request, num_reserva):
     # Get the Caixa objects for the given num_reserva
     caixas = CaixaBanho.objects.filter(num_reserva=num_reserva)

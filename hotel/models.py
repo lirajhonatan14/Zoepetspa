@@ -76,7 +76,7 @@ class ReservaBanho(models.Model):
     observacoes = models.TextField(max_length=100, blank=True, null=True)
     total = models.CharField(max_length=50, blank=True, null=True)
     def __str__(self):
-        return f"Reserva de banho para {self.cachorro.nome} em {self.data_reserva}"
+        return f"Reserva de banho para {self.cachorro} em {self.data_reserva}"
 class ServicosAdicionais(models.Model):
     nome_servico = models.CharField(max_length=50, primary_key=True)
     valor_servico = models.DecimalField(max_digits=6, decimal_places=2)

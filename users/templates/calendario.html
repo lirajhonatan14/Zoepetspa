@@ -60,7 +60,6 @@
                 {
                     id: '{{ reserva.num_reserva }} - {{ reserva.tipo_banho }}',
                     title: '{{ reserva.cachorro }}',
-                    descricao: '{{ reserva.tipo_banho }}',
                     start: '{{ reserva.data_reserva|date:"Y-m-d" }}T{{ reserva.hora_reserva }}',
                     color: 'pink',
                 },
@@ -93,7 +92,6 @@
                 modalTitle.textContent = 'Detalhes da Reserva Banho';
                 modalBody.innerHTML = 'Nº da Reserva: #' + event.id + '<br>' +
                                     'Cachorro: ' + event.title + '<br>' +
-                                    'Descrição: ' + event.descricao + '<br>' +
                                     'Data/Hora: ' + moment(event.start).format(formatDateTime);
             }
 

@@ -26,7 +26,7 @@ class Reservaform(forms.ModelForm):
 class ReservaDayForm(forms.ModelForm):
     class Meta:
         model = ReservaDay
-        fields = ['pet','data','hora_entrada','horario_alimentacao', 'horario_personalizado','instrucoes_medicamentos', 'autorizacao_para_cuidados_medicos', 'servicos_adicionais', 'pacote']
+        fields = ['pet','data','hora_entrada','instrucoes_medicamentos', 'autorizacao_para_cuidados_medicos', 'servicos_adicionais', 'pacote']
         widgets = {
             'usuario': forms.HiddenInput(),
             'num_reserva': forms.HiddenInput(),
@@ -48,7 +48,7 @@ class ReservaDayForm(forms.ModelForm):
 class ReservaBanhoForm(forms.ModelForm):
     class Meta:
         model = ReservaBanho
-        fields = ['data_reserva','hora_reserva','cachorro','tipo_banho','banhista', 'status_de_pagamento', 'observacoes']
+        fields = ['data_reserva','hora_reserva','cachorro','tipo_banho','banhista', 'metodo_de_pagamento','status_de_pagamento', 'observacoes']
         widgets = {
              'total':forms.HiddenInput(),
         }

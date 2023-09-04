@@ -43,6 +43,7 @@
             <tr>
                 <th>Data</th>
                 <th>Descrição</th>
+                <th>Método de Pagamento</th>
                 <th>Valor</th>
             </tr>
         </thead>
@@ -51,6 +52,7 @@
                 <tr>
                     <td>{{ caixa.data_reserva }}</td>
                     <td>Nº da Reserva: {{ caixa.num_reserva }}, {{ caixa.cachorro }} - {{ caixa.tipo_banho }}</td>
+                    <td>{{ caixa.metodo_de_pagamento }}</td>                    
                     <td>{{ caixa.total }}</td>
                 </tr>
             {% endfor %}

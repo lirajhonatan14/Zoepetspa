@@ -42,12 +42,9 @@ class ReservaDay(models.Model):
     data = models.DateField()
     hora_entrada = models.TimeField()
     usuario  = models.ForeignKey(User, on_delete=models.CASCADE)
-    HORARIO_CHOICES = (('2x_dia', 'Duas vezes por dia'),('3x_dia', 'Três vezes por dia'),('personalizado', 'Horário personalizado'),)
-    horario_alimentacao = models.CharField(max_length=20, choices=HORARIO_CHOICES)
-    horario_personalizado = models.CharField(max_length=20, blank=True, null=True)
     instrucoes_medicamentos = models.CharField(max_length=100, blank=True, null=True)
     ACEITAR_CHOICES = (('Sim', 'Duas vezes por dia'),('3x_dia', 'Três vezes por dia'),('personalizado', 'Horário personalizado'),)
-    autorizacao_para_cuidados_medicos = models.BooleanField(default=False, choices=[(False, 'Não'), (True, 'Sim')])
+    autorizacao_para_cuidados_medicos = models.BooleanField(default=True, choices=[(False, 'Não'), (True, 'Sim')])
     servicos_adicionais = models.ForeignKey('hotel.ServicosAdicionais', blank=True,null=True, on_delete=models.CASCADE)
     pacote = models.ForeignKey('hotel.Pacote', on_delete=models.SET_NULL, null=True, blank=True)
     pago = models.BooleanField(default=False, null=True, choices=[(False, 'Não'), (True, 'Sim')])
@@ -74,6 +71,8 @@ class ReservaBanho(models.Model):
     tipo_banho = models.ForeignKey('hotel.ServicosAdicionais', on_delete=models.CASCADE)
     status_de_pagamento = models.BooleanField(default=False, null=True, choices=[(False, 'Não Pago'), (True, 'Pago')])
     observacoes = models.TextField(max_length=100, blank=True, null=True)
+    METODO_CHOICES = (('Cartão de Crédito', 'Cartão de Crédito'),('Cartão de Debito', 'Cartão de Debito'),('Dinheiro', 'Dinheiro'),('Pix', 'Pix'),)
+    metodo_de_pagamento =  models.CharField(max_length=20, choices=METODO_CHOICES)
     total = models.CharField(max_length=50, blank=True, null=True)
     def __str__(self):
         return f"Reserva de banho para {self.cachorro} em {self.data_reserva}"

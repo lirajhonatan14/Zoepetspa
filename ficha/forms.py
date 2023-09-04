@@ -22,3 +22,6 @@ class VacinaAnimalForm(forms.ModelForm):
         fields = ['pet', 'vacina','data_administracao']
         widgets = {
         }
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['pet'].queryset = self.fields['pet'].queryset.order_by('nome')

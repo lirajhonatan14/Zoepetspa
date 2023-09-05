@@ -35,25 +35,25 @@ def nova_reserva(request):
 
 
 
-    
+
 @login_required(login_url="/auth/login/")
 def reservaday(request):
     if request.method == 'POST':
         form_reserva = ReservaDayForm(request.POST)
-        
+
         if form_reserva.is_valid():
             reserva = form_reserva.save(commit=False)
-            
+
             if reserva.pacote:
                 pac = reserva.pacote
                 quant = reserva.pacote.quantidade_dias
                 nome = reserva.pet.nome
-                
+
                 # Verificar se já existe um pacote cliente para o cachorro e pacote selecionados
-                pacote_cliente, created = PacoteCliente.objects.get_or_create(Dog=reserva.pet, pacote=pac, quantidade_dias = quant-1)
-                
+                pacote_cliente, created = PacoteCliente.objects.get_or_create(Dog=nome, pacote=pac, quantidade_dias = quant-1)
+
                 pacote_cliente.save()
-                
+
             reserva.usuario = request.user
             reserva.save()
             form_reserva.save_m2m()
@@ -66,9 +66,9 @@ def reservaday(request):
 def pacote(request):
     pacotes = PacoteCliente.objects.exclude(quantidade_dias=0)
     if request.method == 'POST':
-        
+
         return redirect('mostrar_reserva')
-        
+
     return render(request, 'pacote.html', {'pacotes': pacotes})
 
 @login_required(login_url="/auth/login/")
@@ -95,21 +95,22 @@ def reservaday_list(request):
     return render(request, 'lista_reservasday.html', context)
 @login_required(login_url="/auth/login/")
 def reservabanho_list(request):
-    reservas = ReservaBanho.objects.filter().order_by('data_reserva')
-    #atualizar_total_reservas_banho() 
-    
-   
+    hoje = date.today()
+    reservas = ReservaBanho.objects.filter(data_reserva__gte=hoje).order_by('data_reserva')
+    #atualizar_total_reservas_banho()
+
+
     context = {
         'reservas': reservas,
-    
-        
+
+
     }
     return render(request, 'lista_reservabanho.html', context)
 from django.db.models import F
 
 def atualizar_total_reservas_banho():
     reservas_banho = ReservaBanho.objects.all()
-    
+
     for reserva in reservas_banho:
         total = reserva.tipo_banho.valor_servico
         # Qualquer outra lógica para calcular o total pode ser adicionada aqui
@@ -125,7 +126,7 @@ def proc_reserva(request):
     reservasday = ReservaDay.objects.all().exclude(pacote__nome="Meia Diária/ Avaliação").order_by('data')
     reservasdayav = ReservaDay.objects.filter(pacote__nome='Meia Diária/ Avaliação').order_by('data')
     reservasbanho = ReservaBanho.objects.all().order_by('data_reserva')
-    
+
     search = request.GET.get('search')
     if search:
         reservas = reservas.filter(pet__nome__icontains=search).order_by('data_entrada')
@@ -133,9 +134,9 @@ def proc_reserva(request):
         reservasdayav = reservasdayav.filter(pet__nome__icontains=search).order_by('data')
 
         reservasbanho = reservasbanho.filter(cachorro__icontains=search).order_by('data_reserva')
-        
-        
-        
+
+
+
 
     context = {
         'reservas': reservas,
@@ -143,7 +144,7 @@ def proc_reserva(request):
         'reservasdayav':reservasdayav,
 
         'reservasbanho':reservasbanho,
-        
+
     }
     return render(request, 'historico_reserva.html', context)
 
@@ -151,7 +152,7 @@ def proc_reserva(request):
 def puxar_reserva(request):
     if request.method == 'POST':
         return redirect('mostrar_reserva')
-        
+
     animais = Reserva.objects.all()
     return render(request, 'procurar_reserva.html', {'animais': animais})
 
@@ -161,48 +162,44 @@ def pacote_reservado(request):
         pacote_id = request.POST.get('dog_id')
         data = request.POST.get('data')
         hora = request.POST.get('hora_entrada')
-        
+
         try:
-           
-            
+
+
             animal = ReservaDay.objects.get(pet_id=pacote_id, data__gte=date.today())
         except ReservaDay.DoesNotExist:
             # Lógica de tratamento caso a reserva não seja encontrada
             return HttpResponse("Reserva não encontrada")
         else:
-            
+
             nova_reserva = ReservaDay()
             nova_reserva.pacote_id = animal.pacote_id
             nova_reserva.pet_id = animal.pet_id
             nova_reserva.usuario_id = request.user.id
             nova_reserva.data = data
-            if animal.horario_personalizado:
-                nova_reserva.horario_personalizado = animal.horario_personalizado
             if animal.instrucoes_medicamentos:
-                nova_reserva.instrucoes_medicamentos = animal.instrucoes_medicamentos    
-            if animal.horario_personalizado:
-                nova_reserva.horario_personalizado = animal.horario_personalizado
+                nova_reserva.instrucoes_medicamentos = animal.instrucoes_medicamentos
             if animal.servicos_adicionais:
                 nova_reserva.servicos_adicionais_id = animal.servicos_adicionais_id
+
             
-            nova_reserva.horario_alimentacao = animal.horario_alimentacao
             nova_reserva.autorizacao_para_cuidados_medicos = animal.autorizacao_para_cuidados_medicos
-            
-            
+
+
             nova_reserva.hora_entrada = hora
             # Atribua outros campos conforme necessário
-            
+
             # Salve a nova reserva
             nova_reserva.save()
             animal.delete()
             pacote_cliente = PacoteCliente.objects.get(Dog_id=pacote_id)
-           
+
             pacote_cliente.quantidade_dias -= 1
             pacote_cliente.save()
             if pacote_cliente.quantidade_dias <= 0:
                 pacote_cliente.delete()
                 return redirect('home')
-            
+
 
             return redirect('home')
     else:
@@ -213,7 +210,7 @@ def mostrar_reserva(request, num_reserva):
     try:
         animal = Reserva.objects.get(num_reserva=num_reserva)
         caixa = Caixa.objects.filter(num_reserva__num_reserva=num_reserva)
-        
+
         if caixa:
             caixa = 0
     except Reserva.DoesNotExist:
@@ -222,11 +219,11 @@ def mostrar_reserva(request, num_reserva):
     else:
         # Lógica para exibir a ficha do animal
         return render(request, 'mostrar_reserva.html', {'animal': animal, 'caixa':caixa})
-@login_required(login_url="/auth/login/")   
+@login_required(login_url="/auth/login/")
 def puxar_reservaday(request):
     if request.method == 'POST':
         return redirect('mostrar_reservaday')
-        
+
     animais = ReservaDay.objects.all()
     return render(request, 'procurar_reservaday.html', {'animais': animais})
 
@@ -245,7 +242,7 @@ def mostrar_reservaday(request, num_reserva):
     else:
         # Lógica para exibir a ficha do animal
         return render(request, 'mostrar_reservaday.html', {'animal': animal, 'caixa':caixa, 'quant':quant})
-    
+
 @login_required(login_url="/auth/login/")
 def mostrar_reservabanho(request, num_reserva):
     try:
@@ -258,8 +255,8 @@ def mostrar_reservabanho(request, num_reserva):
     else:
         # Lógica para exibir a ficha do animal
         return render(request, 'mostrar_reservabanho.html', {'animal': animal, 'caixa':caixa})
-    
-     
+
+
 @login_required(login_url="/auth/login/")
 def pacotes(request):
     if request.method == 'POST':
@@ -279,20 +276,20 @@ def reservar_banho(request):
         form = ReservaBanhoForm(request.POST)
         if form.is_valid():
             reserva = form.save(commit=False)
-            
+
             # Obtenha o valor do serviço escolhido
             tipo_banho = form.cleaned_data['tipo_banho']
             valor_servico = tipo_banho.valor_servico
-            
+
             # Calcula o total usando o valor do serviço
             reserva.total = valor_servico
-            
+
             form.save_m2m()
             reserva.save()
             return HttpResponse("Reserva feita com sucesso!")
     else:
         form = ReservaBanhoForm()
-    
+
     context = {
         'form': form,
     }

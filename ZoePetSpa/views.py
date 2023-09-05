@@ -46,7 +46,7 @@ def home(request, mes=None):
     usuario = request.user
     cachorros_aniversario = FichaDog.objects.filter(data_de_nascimento__month=mes)
     vacinas_vencidas, validadee = verificar_vacina()
-    
+    validade = []
     vacinas_vencidas_info = []
 
 # Lista para armazenar as informações das vacinas no período de reforço

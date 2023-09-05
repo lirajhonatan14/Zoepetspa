@@ -49,14 +49,7 @@ class ReservaDay(models.Model):
     pacote = models.ForeignKey('hotel.Pacote', on_delete=models.SET_NULL, null=True, blank=True)
     pago = models.BooleanField(default=False, null=True, choices=[(False, 'Não'), (True, 'Sim')])
     
-    def clean(self):
-        super().clean()
-        if self.horario_alimentacao == 'personalizado':
-            # Validar o input do usuário para horário personalizado
-            # Certifique-se de que o campo "horario_personalizado" seja preenchido
-            if not self.horario_personalizado:
-                raise ValidationError("Horário personalizado requerido.")
-            
+   
     class Meta:
             db_table = 'Reserva_Day'
             
@@ -72,7 +65,7 @@ class ReservaBanho(models.Model):
     status_de_pagamento = models.BooleanField(default=False, null=True, choices=[(False, 'Não Pago'), (True, 'Pago')])
     observacoes = models.TextField(max_length=100, blank=True, null=True)
     METODO_CHOICES = (('Cartão de Crédito', 'Cartão de Crédito'),('Cartão de Debito', 'Cartão de Debito'),('Dinheiro', 'Dinheiro'),('Pix', 'Pix'),)
-    metodo_de_pagamento =  models.CharField(max_length=20, choices=METODO_CHOICES)
+    metodo_de_pagamento =  models.CharField(blank=True, null=True, max_length=20, choices=METODO_CHOICES)
     total = models.CharField(max_length=50, blank=True, null=True)
     def __str__(self):
         return f"Reserva de banho para {self.cachorro} em {self.data_reserva}"

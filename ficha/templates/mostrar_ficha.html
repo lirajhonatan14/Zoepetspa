@@ -7,7 +7,10 @@
     <a class="home" href="{% url 'home' %}">Home</a>
 <div class="corpo">
     <div class='form'>
-        <h1>Ficha de {{animal.nome}}</h1>
+        <div class="imagem">
+            <img src="{{ animal.imagem.url }}" alt="">
+            <h1>{{animal.nome}}</h1>
+        </div>
         <p><strong>Nome do Animal:</strong> {{ animal.nome }}</p>
         <p><strong>Raça:</strong> {{ animal.raca }}</p>
         <p><strong>Data de Nascimento:</strong> {{ animal.data_de_nascimento }}</p>
@@ -82,12 +85,22 @@
     }
     
     th, td {
-        padding: 2%;
-        text-align: left;
-        border-top: 2px solid black;
-        border-bottom: 2px solid black;
-
-        border-right: 2px solid  black;
+       
+        border: 2px solid black;
+        width: auto;
+  
+    }
+    .imagem{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
+    img{
+        width: 200px;
+        margin: 3px;
+    }
+    .table{
+        width: 100%;
     }
 </style>
 </html>

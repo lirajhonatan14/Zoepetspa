@@ -23,6 +23,7 @@ urlpatterns = [
         path('reservar_banho/', views.reservar_banho, name='reservar_banho'),
         #path('calendario/', views.calendario, name='calendario'),
         path('calendario/', views.get_reservas, name='calendario'),
+        path('fechar_reservabanho/', views.fechar_reservabanho, name='fechar_reserva'),
 
         
     ]

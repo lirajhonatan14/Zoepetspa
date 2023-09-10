@@ -15,6 +15,7 @@ class FichaDog(models.Model):
     veterinario = models.CharField(max_length=100,blank=True, null=True)
     observacoes = models.TextField(blank=True, null=True)
     data = models.DateTimeField(auto_now_add=True)
+    imagem = models.ImageField(upload_to='img/', blank=True, null=True)
     
    
     

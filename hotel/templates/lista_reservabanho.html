@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
+   
     <meta charset="utf-8">
     {% load static %}
     
@@ -19,6 +20,8 @@
             <th>Data da Reserva</th>
             <th>Hora da Reserva</th>
             <th>Tipo de Banho</th>
+            <th>Método de Pagamento</th>
+            <th>Status do Pagamento</th>
 
 
           </tr>
@@ -37,6 +40,35 @@
               <td class='data'>{{ reserva.data_reserva |date:"d/m/Y"}}</td>
               <td class='entrada'>{{ reserva.hora_reserva }}</td>
               <td class='tipo'>{{ reserva.tipo_banho }}</td>
+              {% if reserva.metodo_de_pagamento %}
+              <td class='metodo'>{{ reserva.metodo_de_pagamento }}</td>
+                
+              {% else %}
+                <form action="{% url 'fechar_reserva' %}" method="post">
+                  <input type="hidden" name="num_reserva" value="{{ reserva.num_reserva }}">
+                  <td class='metodo_pagamento'>
+                    
+                      {% csrf_token %}
+                    <select name="metodo_pagamento" id="metodo_pagamento">
+                      <option value=""></option>
+                      <option value="debito">Cartão de Debito</option>
+                      <option value="credito">Cartão de Credito</option>
+                      <option value="pix">Pix</option>
+                      <option value="dinheiro">Dinheiro</option>
+                    </select>
+                  
+                  </td>
+              {% endif %}
+                  {% if reserva.status_de_pagamento == True %}
+                    <td class='pagamento'>Pago</td>
+                  {% else %}
+                    <td class="pagamento">
+                      <button type="submit">Não pago</button>
+                    </td>
+                </form>
+                  {% endif %}
+              
+            
           {% endfor %}
         </tbody>
     </table>
@@ -50,12 +82,13 @@
         flex-direction: column ;
       }
       .form{
+        width: 100%;
         text-align:center;
         font-size: 20px;
         border-top:2px solid black;
         border-left:2px solid black;
-        background-color: rgb(231, 141, 130); 
-        margin-left: 20%;
+        background-color: #e78d82; 
+        
       }
       .legenda{
         font-size: 25px;

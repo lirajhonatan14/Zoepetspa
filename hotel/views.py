@@ -14,7 +14,7 @@ from .models import Reserva, ReservaDay, ReservaBanho
 from django.views.generic import View
 from django.core.exceptions import ValidationError
 from caixa.models import Caixa, CaixaDay, CaixaBanho
-
+import logging
 
 @login_required(login_url="/auth/login/")
 # views.py
@@ -97,6 +97,7 @@ def reservaday_list(request):
 def reservabanho_list(request):
     hoje = date.today()
     reservas = ReservaBanho.objects.filter(data_reserva__gte=hoje).order_by('data_reserva')
+    
     #atualizar_total_reservas_banho()
 
 
@@ -155,7 +156,33 @@ def puxar_reserva(request):
 
     animais = Reserva.objects.all()
     return render(request, 'procurar_reserva.html', {'animais': animais})
+def fechar_reservabanho(request):
+    metodo_pagamento = request.POST.get('metodo_pagamento')
+    num_reserva = request.POST.get('num_reserva')
 
+    if metodo_pagamento == 'debito':
+        banho = ReservaBanho.objects.get(num_reserva=num_reserva)
+        banho.metodo_de_pagamento = "Cartão de Debito"
+        banho.status_de_pagamento = True
+        banho.save()
+    elif metodo_pagamento == 'credito':
+        banho = ReservaBanho.objects.get(num_reserva=num_reserva)
+        banho.metodo_de_pagamento = "Cartão de Crédito"
+        banho.status_de_pagamento = True
+        banho.save()
+    elif metodo_pagamento == 'pix':
+        banho = ReservaBanho.objects.get(num_reserva=num_reserva)
+        banho.metodo_de_pagamento = "Pix"
+        banho.status_de_pagamento = True
+        banho.save()
+    elif metodo_pagamento == 'dinheiro':
+        banho = ReservaBanho.objects.get(num_reserva=num_reserva)
+        banho.metodo_de_pagamento = "Dinheiro"
+        banho.status_de_pagamento = True
+        banho.save()
+    logger = logging.getLogger(__name__)
+    logger.error('Isso é uma mensagem de ERROR')
+    return redirect('lista_reservabanho')
 @login_required(login_url="/auth/login/")
 def pacote_reservado(request):
     if request.method == 'POST':
